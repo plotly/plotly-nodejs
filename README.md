@@ -12,7 +12,7 @@
 
     plotly.signup('desired_username', 'your@email.com')
 
-    plotly.plot(data, username_or_email, api_key, kwargs)
+    plotly.plot(data, username_or_email, api_key, layout)
 
 ###Example
 
@@ -24,9 +24,8 @@
 	var data= [{
     	"x": [1, 2, 3, 4],
     	"y": [10, 15, 13, 17],
-    	"type": "scatter",
-    	"mode": "markers"
-	}]
+    	"type": "scatter"
+	}];
 
 	var layout = {
 		"filename": "node node node node",
