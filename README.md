@@ -51,3 +51,8 @@ plotly.plot(data, un, key, layout);
 ```
 
 Go ahead and copy and paste the link into your browser to check out your graph!
+
+
+### Full REST API Documentation can be found here
+
+[Plotly REST Documentation](https://plot.ly/api/rest/)
