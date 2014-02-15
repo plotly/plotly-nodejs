@@ -40,3 +40,8 @@ var layout = {
 
 plotly.plot(data, un, key, layout);
 ```
+
+###Example Response
+```JSON
+{"url": "http://plot.ly/~demos/1324", "message": "", "warning": "", "filename": "node node node node (5)", "error": ""}
+```
