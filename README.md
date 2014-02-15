@@ -1,9 +1,14 @@
 A simple node.js wrapper for the Plotly API.
 
-Two functions:
+Installation
+
+    npm install plotly
+
+Usage
 
     var plotly = require('plotly');
 
-    plotly.signup('desired_username', 'your@email.com')
+There are two main functions, all arguments are required.
 
+    plotly.signup('desired_username', 'your@email.com')
     plotly.plot(data, username_or_email, api_key, kwargs)`
