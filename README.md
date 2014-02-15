@@ -16,7 +16,7 @@ plotly.signup('desired_username', 'your@email.com')
 plotly.plot(data, username_or_email, api_key, layout)
 ```
 
-###Example
+###Plotting Example
 ```Javascript
 var plotly = require('plotly');
 
