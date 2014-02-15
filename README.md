@@ -2,11 +2,11 @@
 
 ###Installation
 ```Javascript
-    npm install plotly
+npm install plotly
 ```
 ###Usage
 ```Javascript
-    var plotly = require('plotly');
+var plotly = require('plotly');
 ```
 ###There are two main functions, all arguments are required.
 
