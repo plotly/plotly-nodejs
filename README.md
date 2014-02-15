@@ -15,7 +15,7 @@
     plotly.plot(data, username_or_email, api_key, layout)
 
 ###Example
-```javascript
+```Javascript
 var plotly = require('plotly');
 
 var un= "your_username";
