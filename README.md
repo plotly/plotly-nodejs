@@ -43,5 +43,11 @@ plotly.plot(data, un, key, layout);
 
 ###Example Response
 ```JSON
-{"url": "http://plot.ly/~demos/1324", "message": "", "warning": "", "filename": "node node node node (5)", "error": ""}
+{"url": "http://plot.ly/~demos/1324",
+"message": "",
+"warning": "",
+"filename": "node node node node",
+"error": ""}
 ```
+
+Go ahead and copy and paste the link into your browser to check out your graph!
