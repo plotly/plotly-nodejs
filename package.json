@@ -1,0 +1,22 @@
+{
+  "name": "plotly",
+  "version": "0.1.1",
+  "description": "Simple node.js wrapper for the plot.ly API",
+  "main": "plotly.js",
+  "dependencies": {
+    "http-post": "~0.1.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "plotting",
+    "graphs",
+    "interactive",
+    "data",
+    "visualization"
+  ],
+  "author": "Alexander Daniel <alex@lesinstruments.com> (http://lesinstruments.com/)",
+  "license": "MIT"
+}
