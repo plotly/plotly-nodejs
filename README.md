@@ -15,25 +15,26 @@
     plotly.plot(data, username_or_email, api_key, layout)
 
 ###Example
+```javascript
+var plotly = require('plotly');
 
-    var plotly = require('plotly');
+var un= "your_username";
+var key= "your_api_key";
 
-	var un= "your_username";
-	var key= "your_api_key";
+var data= [{
+	"x": [1, 2, 3, 4],
+	"y": [10, 15, 13, 17],
+	"type": "scatter"
+}];
 
-	var data= [{
-    	"x": [1, 2, 3, 4],
-    	"y": [10, 15, 13, 17],
-    	"type": "scatter"
-	}];
+var layout = {
+	"filename": "node node node node",
+	"fileopt": "new",
+	"layout": {
+		"title": "experimental node data"
+	},
+	"world_readable": true
+};
 
-	var layout = {
-		"filename": "node node node node",
-		"fileopt": "new",
-		"layout": {
-			"title": "experimental node data"
-		},
-		"world_readable": true
-	};
-
-	plotly.plot(data, un, key, layout);
+plotly.plot(data, un, key, layout);
+```
