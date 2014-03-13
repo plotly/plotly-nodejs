@@ -1,4 +1,4 @@
-##Simple node.js Wrapper for the Plotly API.
+## node.js + Plotly Streaming API
 
 ###Installation
 ```Javascript
