@@ -1,10 +1,9 @@
-## node.js + Plotly Streaming API
-
-###Installation
+###node.js + Plotly Streaming API
+####Installation
 ```Javascript
 npm install plotly
 ```
-###Usage
+####Usage
 ```Javascript
 var plotly = require('plotly')('username','api_key');
 
@@ -18,6 +17,6 @@ plotly.plot(data,layout,function() {
 });
 ```
 
-### Full REST API Documentation can be found here
+####Full REST API Documentation can be found here
 
 [Plotly REST Documentation](https://plot.ly/api/rest/)
