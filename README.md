@@ -12,7 +12,7 @@ var layout = {fileopt : "extend",filename : "node node"};
 
 plotly.plot(data,layout,function() {
 	plotly.stream('', function(err,stream){
-		somereadablestream.pipe(stream);
+		someReadableStream.pipe(stream);
 	});
 });
 ```
