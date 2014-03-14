@@ -1,9 +1,9 @@
-##node.js + Plotly Streaming API
-####Installation
+#node.js + Plotly Streaming API
+Analyze and Visualize Data, Together.js
 ```Javascript
 npm install plotly
 ```
-####Usage
+###Usage
 ```Javascript
 var plotly = require('plotly')('username','api_key');
 
