@@ -23,7 +23,7 @@ Example:
 var plotly = require('plotly');
 plotly.signup('some_clever_username','your@email.com')
 ```
-####plot(data,layout,[callback])
+####plot(data,layout[, callback])
 Example:
 ```Javascript
 var plotly = require('plotly')('username','api_key');
@@ -35,7 +35,7 @@ plotly.plot(data,layout,function() {
 	// Do some things after the POST	
 });
 ```
-####stream(your_streamtoken,[callback])
+####stream(your_streamtoken[, callback])
 Example:
 ```Javascript
 var plotly = require('plotly')('username','api_key');
