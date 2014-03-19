@@ -1,0 +1,16 @@
+{
+  "200": "healthy endpoint disconnect"
+  , "308": "stream had ended"
+  , "400": "invalid or malformed request syntax"
+  , "403": "stream token no longer associated with this plot"
+  , "404": "streamtoken not registered or valid"
+  , "405": "bad request method: use POST for streaming"
+  , "406": "bad request header: missing 'plotly-streamtoken'"
+  , "408": "timeout on active data"
+  , "422": "json parse error: please stream newline seperated JSON"
+  , "423": "connection limit associated with this token has been reached"
+  , "449": "stream content has changed, reloading clients"
+  , "500": "internal server error"
+  , "503": "internal database error"
+  , "520": "error in request stream"
+}
