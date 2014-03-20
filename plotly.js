@@ -15,31 +15,57 @@ function Plotly(username,api_key) {
     return this;
 }
 
-Plotly.prototype.stream = function(opts, callback) {
-  if (typeof opts === "string") {
-    // allow users to pass in an object or string
-    opts = {token: opts};
+Plotly.prototype.signup = function(un, email, callback) {
+  if (typeof un === 'object' && typeof email === 'function') {
+    opts = un;
+    callback = email;
+    un = opts.un;
+    email = opts.email;
   }
+
+  var pack = {'version': version, 'un': un, 'email': email, 'platform':platform };
+  var urlencoded = '';
+
+  for (var key in pack) {
+    urlencoded += key + "=" + pack[key] + "&";
+  }
+  urlencoded = urlencoded.substring(0, urlencoded.length - 1);
+
   var options = {
-    host: opts.host || 'stream.plot.ly',
+    host: opts.host || 'plot.ly',
     port: opts.port || 80,
-    path: '/',
+    path: '/apimkacct',
     method: 'POST',
-    agent: false,
-    headers: { "plotly-streamtoken" : opts.token }
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlencoded.length
+    }
   };
 
-  var stream = http.request(options, function(res) {
-    var message = json_status[res.statusCode];
-        if (res.statusCode !== 200) {
-          callback({msg : message, statusCode: res.statusCode});
+  var req = http.request(options, function (res) {
+      parseRes(res, function (err, body) {
+        body = JSON.parse(body);
+        if (err || res.statusCode !== 200) {
+          callback({err: err, body: body, statusCode: res.statusCode});
         } else {
-          callback(null, {msg : message, statusCode: res.statusCode});
+          callback(null, {
+            un: body.un,
+            api_key: body.api_key,
+            tmp_pw: body.tmp_pw,
+            msg: body.message,
+            error: body.error,
+            statusCode: res.statusCode
+          });
         }
+      });
   });
 
-  if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
-  return stream;
+  req.on('error', function(err) {
+      callback(err);
+  });
+
+  req.write(urlencoded);
+  req.end();
 };
 
 Plotly.prototype.plot = function(data, layout, callback) {
@@ -114,57 +140,31 @@ Plotly.prototype.plot = function(data, layout, callback) {
   req.end();
 };
 
-Plotly.prototype.signup = function(un, email, callback) {
-  if (typeof un === 'object' && typeof email === 'function') {
-    opts = un;
-    callback = email;
-    un = opts.un;
-    email = opts.email;
+Plotly.prototype.stream = function(opts, callback) {
+  if (typeof opts === "string") {
+    // allow users to pass in an object or string
+    opts = {token: opts};
   }
-
-  var pack = {'version': version, 'un': un, 'email': email, 'platform':platform };
-  var urlencoded = '';
-
-  for (var key in pack) {
-    urlencoded += key + "=" + pack[key] + "&";
-  }
-  urlencoded = urlencoded.substring(0, urlencoded.length - 1);
-
   var options = {
-    host: opts.host || 'plot.ly',
+    host: opts.host || 'stream.plot.ly',
     port: opts.port || 80,
-    path: '/apimkacct',
+    path: '/',
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': urlencoded.length
-    }
+    agent: false,
+    headers: { "plotly-streamtoken" : opts.token }
   };
 
-  var req = http.request(options, function (res) {
-      parseRes(res, function (err, body) {
-        body = JSON.parse(body);
-        if (err || res.statusCode !== 200) {
-          callback({err: err, body: body, statusCode: res.statusCode});
+  var stream = http.request(options, function(res) {
+    var message = json_status[res.statusCode];
+        if (res.statusCode !== 200) {
+          callback({msg : message, statusCode: res.statusCode});
         } else {
-          callback(null, {
-            un: body.un,
-            api_key: body.api_key,
-            tmp_pw: body.tmp_pw,
-            msg: body.message,
-            error: body.error,
-            statusCode: res.statusCode
-          });
+          callback(null, {msg : message, statusCode: res.statusCode});
         }
-      });
   });
 
-  req.on('error', function(err) {
-      callback(err);
-  });
-
-  req.write(urlencoded);
-  req.end();
+  if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
+  return stream;
 };
 
 // response parse helper fn
