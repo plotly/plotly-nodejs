@@ -116,11 +116,10 @@ Plotly.prototype.plot = function(data, layout, callback) {
   var req = http.request(options, function (res) {
     parseRes(res, function (err, body) {
       body = JSON.parse(body);
-      if (err || res.statusCode !== 200) {
-        callback({err: err, body: body, statusCode: res.statusCode});
+      if ( body.error.length > 0 ) {
+        callback({err: body.error, body: body, statusCode: res.statusCode});
       } else {
         callback(null, {
-        //body: body,
         streamstatus : body['stream-status'],
         url: body.url,
         message: body.message,
