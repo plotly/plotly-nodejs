@@ -17,7 +17,11 @@ plotly.plot(data,layout,function() {
 });
 ```
 ###The Plotly Object has three functions:
-####signup(desired_username,email)
+####signup(desired_username,email[, callback])
+`callback` has `err`, `msg` as arguments and will return a response or error from Plot.ly.	
+	
+The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
+
 Example:
 ```Javascript
 var plotly = require('plotly')();
@@ -30,6 +34,10 @@ plotly.signup(un, email, function (err, msg) {
 });
 ```
 ####plot(data,layout[, callback])
+`callback` has `err`, `msg` as arguments, and will return a response or error from Plot.ly	
+
+The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
+	
 Example:
 ```Javascript
 var plotly = require('plotly')('your_username','your_apikey');
@@ -47,6 +55,10 @@ plotly.plot(options, function (err, msg) {
 });
 ```
 ####stream(your_streamtoken[, callback])
+`callback` has `res` as an argument, and will return a response from Plotly. 
+	
+the `res` object has the following attributes : `res.msg`, `res.statusCode`	
+
 Example:
 ```Javascript
 var plotly = require('plotly')('your_username','your_apikey');
