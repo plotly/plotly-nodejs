@@ -11,43 +11,60 @@ var data = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
 var layout = {fileopt : "extend",filename : "node node"};
 
 plotly.plot(data,layout,function() {
-	plotly.stream('your_streamtoken', function(err,stream){
-		someReadableStream.pipe(stream);
+	var stream = plotly.stream('your_streamtoken', function(res){
 	});
+	someReadableStream.pipe(stream);
 });
 ```
 ###The Plotly Object has three functions:
 ####signup(desired_username,email)
 Example:
 ```Javascript
-var plotly = require('plotly');
-plotly.signup('some_clever_username','your@email.com')
+var plotly = require('./plotly.js')();
+
+var un = 'desired_username';
+var email = 'your_email@email.com';
+
+plotly.signup(un, email, function (err, msg) {
+	console.log(msg);
+});
 ```
 ####plot(data,layout[, callback])
 Example:
 ```Javascript
-var plotly = require('plotly')('username','api_key');
+var plotly = require('plotly')('your_username','your_apikey');
 
-var data = [{x:getSomeX,y:getSomeY}];
-var layout = {filename : 'node node'};
+var data = [{x:[0,1,2],y:[3,2,1], type: 'bar'}];
+var layout = {fileopt : "extend",filename : "node node node node"};
 
-plotly.plot(data,layout,function() {
-	// Do some things after the POST	
+var options = {
+	data : data,
+	layout : layout
+};
+
+plotly.plot(options, function (err, msg) {
+	console.log(msg);
 });
 ```
 ####stream(your_streamtoken[, callback])
 Example:
 ```Javascript
-var plotly = require('plotly')('username','api_key');
+var plotly = require('./plotly.js')('your_username','your_apikey');
 
 var initdata = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
-var initlayout = {fileopt : "extend",filename : "node node"};
+var initlayout = {fileopt : "extend",filename : "node node node node"};
+var options = { data : data, layout : layout };
 
-plotly.plot(initdata,initlayout,function() {
-	plotly.stream('your_stream_token', function(err,stream) {
-		// Start Streaming!
-		getReadableStream.pipe(stream);
+plotly.plot(initdata, initlayout, function (err, msg) {
+	var stream1 = plotly.stream('your_streamtoken', function (res) {
+		clearInterval(iv); // once stream is closed, stop writing
 	});
+	var i = 0;
+	var loop = setInterval(function () {
+			var streamObject = JSON.stringify({ x : i, y : i });
+			stream1.write(streamObject+'\n');
+			i++;
+	}, 1000);
 });
 ```
 
