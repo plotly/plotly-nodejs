@@ -1,5 +1,6 @@
 #node.js + Plotly Streaming API
 Analyze and Visualize Data, Together.js
+###Installation
 ```Javascript
 npm install plotly
 ```
@@ -18,7 +19,7 @@ plotly.plot(data,layout,function() {
 ```
 ###Methods
 ####signup(desired_username,email[, callback])
-`callback` has `err`, `msg` as arguments and will return a response or error from Plot.ly.	
+`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 	
 The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
 
@@ -34,7 +35,7 @@ plotly.signup(un, email, function (err, msg) {
 });
 ```
 ####plot(data,layout[, callback])
-`callback` has `err`, `msg` as arguments, and will return a response or error from Plot.ly	
+`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
 	
@@ -51,9 +52,7 @@ plotly.plot(options, function (err, msg) {
 });
 ```
 ####stream(your_streamtoken[, callback])
-`callback` has `res` as an argument, and will return a response from Plotly. 
-	
-the `res` object has the following attributes : `res.msg`, `res.statusCode`	
+`callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`	
 
 #####Example:
 ```Javascript
