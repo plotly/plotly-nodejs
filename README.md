@@ -20,7 +20,7 @@ plotly.plot(data,layout,function() {
 ####signup(desired_username,email)
 Example:
 ```Javascript
-var plotly = require('./plotly.js')();
+var plotly = require('plotly')();
 
 var un = 'desired_username';
 var email = 'your_email@email.com';
@@ -49,7 +49,7 @@ plotly.plot(options, function (err, msg) {
 ####stream(your_streamtoken[, callback])
 Example:
 ```Javascript
-var plotly = require('./plotly.js')('your_username','your_apikey');
+var plotly = require('plotly')('your_username','your_apikey');
 
 var initdata = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
 var initlayout = {fileopt : "extend",filename : "node node node node"};
