@@ -16,6 +16,7 @@ function Plotly(username,api_key) {
 }
 
 Plotly.prototype.signup = function(un, email, callback) {
+    var that = this;
   if (typeof un === 'object' && typeof email === 'function') {
     opts = un;
     callback = email;
@@ -48,6 +49,9 @@ Plotly.prototype.signup = function(un, email, callback) {
         if (err || res.statusCode !== 200) {
           callback({err: err, body: body, statusCode: res.statusCode});
         } else {
+            that.un = body.un;
+            that.api_key = body.api_key;
+            
           callback(null, {
             un: body.un,
             api_key: body.api_key,
