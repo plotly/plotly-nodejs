@@ -183,7 +183,6 @@ function parseRes (res, cb) {
   if ('setEncoding' in res) {
     res.setEncoding('utf-8');
   }
-  res.setEncoding('utf8');
   res.on('data', function (data) {
     body += data;
     if (body.length > 1e4) {
