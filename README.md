@@ -1,4 +1,4 @@
-#node.js + Plotly Streaming API
+#Plotly Node API
 Analyze and Visualize Data, Together.js
 ##Installation
 ```javascript
