@@ -150,7 +150,7 @@ Plotly.prototype.stream = function(token, callback) {
   var opts = {};
   if (typeof token === "object") {
     // allow users to pass in an object or string
-    opts = token;
+    token = opts.token;
   }
   var options = {
     host: opts.host || 'stream.plot.ly',
@@ -158,7 +158,7 @@ Plotly.prototype.stream = function(token, callback) {
     path: '/',
     method: 'POST',
     agent: false,
-    headers: { "plotly-streamtoken" : opts.token }
+    headers: { "plotly-streamtoken" : token }
   };
 
   if (!callback) { callback = function() {}; }
