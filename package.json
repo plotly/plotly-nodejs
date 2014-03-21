@@ -3,7 +3,9 @@
   "version": "0.1.7",
   "description": "Simple node.js wrapper for the plot.ly API",
   "main": "plotly.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "random-signal": "0.0.2"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
