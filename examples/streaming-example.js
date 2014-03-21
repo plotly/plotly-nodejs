@@ -1,12 +1,7 @@
 var plotly = require('../.')('your_username','your_apikey');
 
-var initdata = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
-var initlayout = {fileopt : "extend",filename : "node node node node"};
-
-var options = {
-	data : data,
-	layout : layout
-};
+var initdata = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
+var initlayout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(initdata, initlayout, function (err, msg) {
 	var stream1 = plotly.stream('your_streamtoken', function (res) {

@@ -8,8 +8,8 @@ npm install plotly
 ```javascript
 var plotly = require('plotly')('username','api_key');
 
-var data = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
-var layout = {fileopt : "extend",filename : "node node"};
+var data = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
+var layout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(data,layout,function() {
 	var stream = plotly.stream('your_streamtoken', function(res){
@@ -60,11 +60,10 @@ The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.me
 
 var plotly = require('plotly')('your_username','your_apikey');
 
-var data = [{x:[0,1,2],y:[3,2,1], type: 'bar'}];
-var layout = {fileopt : "extend",filename : "node node node node"};
-var options = { data : data, layout : layout };
+var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
+var layout = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(options, function (err, msg) {
+plotly.plot(data, layout, function (err, msg) {
 	console.log(msg);
 });
 ```
@@ -77,9 +76,8 @@ plotly.plot(options, function (err, msg) {
 
 var plotly = require('plotly')('your_username','your_apikey');
 
-var initdata = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
-var initlayout = {fileopt : "extend",filename : "node node node node"};
-var options = { data : data, layout : layout };
+var initdata = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
+var initlayout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(initdata, initlayout, function (err, msg) {
 	var stream1 = plotly.stream('your_streamtoken', function (res) {
