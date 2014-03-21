@@ -24,6 +24,8 @@ Plotly.prototype.signup = function(un, email, callback) {
     email = opts.email;
   }
 
+  if (!callback) { callback = function() {}; }
+
   var pack = {'version': version, 'un': un, 'email': email, 'platform':platform };
   var urlencoded = '';
 
@@ -84,6 +86,8 @@ Plotly.prototype.plot = function(data, layout, callback) {
     data = opts.data || [];
   }
 
+  if (!callback) { callback = function() {}; }
+
   // allow users to just pass in an object for the data, data = {x:[],y:[]}
   if (!Array.isArray(data)) data = [data];
 
@@ -142,10 +146,11 @@ Plotly.prototype.plot = function(data, layout, callback) {
   req.end();
 };
 
-Plotly.prototype.stream = function(opts, callback) {
-  if (typeof opts === "string") {
+Plotly.prototype.stream = function(token, callback) {
+  var opts = {};
+  if (typeof token === "object") {
     // allow users to pass in an object or string
-    opts = {token: opts};
+    opts = token;
   }
   var options = {
     host: opts.host || 'stream.plot.ly',
@@ -155,6 +160,8 @@ Plotly.prototype.stream = function(opts, callback) {
     agent: false,
     headers: { "plotly-streamtoken" : opts.token }
   };
+
+  if (!callback) { callback = function() {}; }
 
   var stream = http.request(options, function(res) {
     var message = json_status[res.statusCode];
