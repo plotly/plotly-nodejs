@@ -124,7 +124,7 @@ Plotly.prototype.plot = function(data, layout, callback) {
     parseRes(res, function (err, body) {
       body = JSON.parse(body);
       if ( body.error.length > 0 ) {
-        callback({err: body.error, body: body, statusCode: res.statusCode});
+        callback({msg: body.error, body: body, statusCode: res.statusCode});
       } else {
         callback(null, {
         streamstatus : body['stream-status'],

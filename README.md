@@ -24,16 +24,22 @@ You can sign up for Plotly [Here](https://plot.ly/) and obtain your API key and 
 Or, you can use the `signup()` method detailed below!
 
 #Methods
+##var plotly = require('plotly')(username, api_key)
+`username` is a string containing your username    
+`api_key` is a string containing your API key   
 ```javascript
 var plotly = require('plotly')();
 ```
 ##plotly.signup(desired_username,email[, callback])
-`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
+`desired_username` is a string representing your desired Plotly username    
+`email` is string containing your e-mail address    
+`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	 
 	
 The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
 
-###Example:
 ```javascript
+// examples/signup-example.js
+
 var plotly = require('plotly')();
 
 var un = 'desired_username';
@@ -44,11 +50,14 @@ plotly.signup(un, email, function (err, msg) {
 });
 ```
 ##plotly.plot(data,layout[, callback])
+`data` is an Object containing your trace data and styling information. [Docs](https://plot.ly/api/rest)  
+`layout` is an Object containing layout options for your graph. [Docs](https://plot.ly/api/rest)  
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
-###Example:
-```Javascript
+```javascript
+// examples/rest-example.js
+
 var plotly = require('plotly')('your_username','your_apikey');
 
 var data = [{x:[0,1,2],y:[3,2,1], type: 'bar'}];
@@ -60,10 +69,12 @@ plotly.plot(options, function (err, msg) {
 });
 ```
 ##plotly.stream(your_streamtoken[, callback])
+`your_streamtoken` accepts a token string   
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`	
 
-###Example:
 ```javascript
+// examples/streaming-example.js
+
 var plotly = require('plotly')('your_username','your_apikey');
 
 var initdata = [{x:[],y:[],stream:{token:'your_streamtoken',maxpoints:200}}];
@@ -83,9 +94,10 @@ plotly.plot(initdata, initlayout, function (err, msg) {
 });
 ```
 
-###Full Example:
 [Live Streaming Example](https://plot.ly/~Streaming-Demos/6/)
 ```javascript
+// examples/signal-stream.js
+
 /* If you have not signed up for Plotly you can do so using https://plot.ly
  * or see the example signup.js. Once you do, populate the config.json in this
  * example folder!
