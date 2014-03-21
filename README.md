@@ -19,7 +19,7 @@ plotly.plot(data,layout,function() {
 ```
 ####Full REST API Documentation can be found [Here](https://plot.ly/api/rest/)
 
-You can sign up for Plotly [Here](https://plot.ly/) and obtain your API key and Stream Tokens from you [Settings](https://plot.ly/settings). 
+You can sign up for Plotly [Here](https://plot.ly/) and obtain your API key and Stream Tokens from your [Settings](https://plot.ly/settings). 
 
 Or, you can use the `signup()` method detailed below!
 
