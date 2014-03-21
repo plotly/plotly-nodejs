@@ -109,6 +109,7 @@ Plotly.prototype.plot = function(data, layout, callback) {
     host: opts.host || 'plot.ly',
     port: opts.port || 80,
     path: '/clientresp',
+    withCredentials: false,
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -153,6 +154,7 @@ Plotly.prototype.stream = function(opts, callback) {
     path: '/',
     method: 'POST',
     agent: false,
+    withCredentials: false,
     headers: { "plotly-streamtoken" : opts.token }
   };
 
