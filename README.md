@@ -40,13 +40,7 @@ plotly.signup(un, email, function (err, msg) {
 ##plotly.plot(data,layout[, callback])
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
-The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
-```javascript
-{
-	url: 
-}
-```
-	
+The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
 ###Example:
 ```Javascript
 var plotly = require('plotly')('your_username','your_apikey');
