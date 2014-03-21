@@ -84,7 +84,7 @@ plotly.plot(initdata, initlayout, function (err, msg) {
 ```
 
 ###Full Example:
-[Live Streaming Example](https://plot.ly/Streaming-Demos/6/)
+[Live Streaming Example](https://plot.ly/~Streaming-Demos/6/)
 
 ####Full REST API Documentation can be found here
 
