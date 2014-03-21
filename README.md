@@ -18,7 +18,10 @@ plotly.plot(data,layout,function() {
 });
 ```
 #Methods
-##signup(desired_username,email[, callback])
+```javascript
+var plotly = require('plotly')();
+```
+##plotly.signup(desired_username,email[, callback])
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 	
 The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
@@ -34,7 +37,7 @@ plotly.signup(un, email, function (err, msg) {
 	console.log(msg);
 });
 ```
-##plot(data,layout[, callback])
+##plotly.plot(data,layout[, callback])
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
@@ -51,7 +54,7 @@ plotly.plot(options, function (err, msg) {
 	console.log(msg);
 });
 ```
-##stream(your_streamtoken[, callback])
+##plotly.stream(your_streamtoken[, callback])
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`	
 
 #####Example:
