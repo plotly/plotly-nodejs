@@ -17,6 +17,7 @@ function Plotly(username,api_key) {
 
 Plotly.prototype.signup = function(un, email, callback) {
   var that = this;
+  var opts = {};
   if (typeof un === 'object' && typeof email === 'function') {
     opts = un;
     callback = email;
@@ -33,8 +34,8 @@ Plotly.prototype.signup = function(un, email, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: 'plot.ly',
-    port: 80,
+    host: opts.host || 'plot.ly',
+    port: opts.port || 80,
     path: '/apimkacct',
     method: 'POST',
     headers: {
