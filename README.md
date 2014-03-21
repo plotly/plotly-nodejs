@@ -26,7 +26,7 @@ var plotly = require('plotly')();
 	
 The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
 
-#####Example:
+###Example:
 ```Javascript
 var plotly = require('plotly')();
 
@@ -47,7 +47,7 @@ The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.me
 }
 ```
 	
-#####Example:
+###Example:
 ```Javascript
 var plotly = require('plotly')('your_username','your_apikey');
 
@@ -62,7 +62,7 @@ plotly.plot(options, function (err, msg) {
 ##plotly.stream(your_streamtoken[, callback])
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`	
 
-#####Example:
+###Example:
 ```Javascript
 var plotly = require('plotly')('your_username','your_apikey');
 
@@ -83,7 +83,7 @@ plotly.plot(initdata, initlayout, function (err, msg) {
 });
 ```
 
-#####Full Example
+###Full Example:
 [Live Streaming Example](https://plot.ly/Streaming-Demos/6/)
 
 ####Full REST API Documentation can be found here
