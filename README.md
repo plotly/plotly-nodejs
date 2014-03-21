@@ -12,10 +12,10 @@ var data = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
 var layout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(data,layout,function() {
-	var stream = plotly.stream('your_streamtoken', function(res){
+  var stream = plotly.stream('your_streamtoken', function (res) {
     console.log(res);
   });
-	someReadableStream.pipe(stream);
+  someReadableStream.pipe(stream);
 });
 ```
 ####Full REST API Documentation can be found [Here](https://plot.ly/api/rest/)
