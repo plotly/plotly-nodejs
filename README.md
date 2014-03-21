@@ -41,6 +41,11 @@ plotly.signup(un, email, function (err, msg) {
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
+```javascript
+{
+	url: 
+}
+```
 	
 #####Example:
 ```Javascript
@@ -77,6 +82,9 @@ plotly.plot(initdata, initlayout, function (err, msg) {
 	}, 1000);
 });
 ```
+
+#####Full Example
+[Live Streaming Example](https://plot.ly/Streaming-Demos/6/)
 
 ####Full REST API Documentation can be found here
 
