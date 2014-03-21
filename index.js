@@ -172,6 +172,9 @@ Plotly.prototype.stream = function(opts, callback) {
 // response parse helper fn
 function parseRes (res, cb) {
   var body = '';
+  if ('setEncoding' in res) {
+    res.setEncoding('utf-8');
+  }
   res.setEncoding('utf8');
   res.on('data', function (data) {
     body += data;
