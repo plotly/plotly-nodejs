@@ -2,7 +2,7 @@
  * or see the example signup.js. Once you do, populate the config.json in this
  * example folder!
  */
-var config = require('../config.json')
+var config = require('./config.json')
   , username = config['user']
   , apikey = config['apikey']
   , token = config['token']
