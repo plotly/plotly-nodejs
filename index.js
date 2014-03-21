@@ -117,7 +117,8 @@ Plotly.prototype.plot = function(data, layout, callback) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': urlencoded.length
-    }
+    },
+    withCredentials: false
   };
 
   var req = http.request(options, function (res) {
