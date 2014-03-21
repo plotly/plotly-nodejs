@@ -13,7 +13,8 @@ var layout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(data,layout,function() {
 	var stream = plotly.stream('your_streamtoken', function(res){
-	});
+    console.log(res);
+  });
 	someReadableStream.pipe(stream);
 });
 ```
