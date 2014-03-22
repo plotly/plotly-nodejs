@@ -69,21 +69,21 @@ plotly.plot(data, layout, function (err, msg) {
 });
 ```
 ##var stream = plotly.stream(token[, callback])
-`your_streamtoken` accepts a token string   
+`token` accepts a token string   
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`
 
 ```javascript
 // examples/streaming-example.js
 var plotly = require('plotly')('your_username','your_apikey');
 
-var initdata = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
+var initdata = [{x:[], y:[], stream:{token:'token', maxpoints:200}}];
 var initlayout = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(initdata, initlayout, function (err, msg) {
   if (err) return console.log(err)
   console.log(msg);
 
-  var stream1 = plotly.stream('your_streamtoken', function (err, res) {
+  var stream1 = plotly.stream('token', function (err, res) {
     console.log(err, res);
     clearInterval(loop); // once stream is closed, stop writing
   });
