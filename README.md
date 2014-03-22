@@ -68,9 +68,9 @@ plotly.plot(data, layout, function (err, msg) {
 	console.log(msg);
 });
 ```
-##plotly.stream(your_streamtoken[, callback])
+##var stream = plotly.stream(token[, callback])
 `your_streamtoken` accepts a token string   
-`callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`	
+`callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`
 
 ```javascript
 // examples/streaming-example.js
