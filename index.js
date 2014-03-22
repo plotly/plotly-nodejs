@@ -149,8 +149,8 @@ Plotly.prototype.plot = function(data, layout, callback) {
 
 Plotly.prototype.stream = function(token, callback) {
   var opts = {};
-  if (typeof token === "object") {
-    // allow users to pass in an object or string
+   if (typeof token === "object") {
+    opts = token
     token = opts.token;
   }
   var options = {
