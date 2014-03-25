@@ -1,6 +1,7 @@
 #Plotly Node API
 Analyze and Visualize Data, Together.js
-"If you have a question about Streaming let us know! ben@plot.ly && alexandre@plot.ly"
+"If you have a question about Streaming let us know!	
+`ben@plot.ly` && `alexandre@plot.ly`
 ##Installation
 ```javascript
 npm install plotly
