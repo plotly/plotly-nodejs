@@ -8,6 +8,7 @@ If you have a question about Streaming let us know!
 
 ## Streaming Plot Examples
 [mock sensor stream](http://plot.ly/~streaming-demos/6/)
+[math bar fight](http://plot.ly/~streaming-demos/44/)
 
 ##Installation
 ```javascript
