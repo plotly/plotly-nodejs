@@ -5,10 +5,15 @@ Analyze and Visualize Data, Together.js
 If you have a question about Streaming let us know!	
 
 `ben@plot.ly` && `alexandre@plot.ly`
+
+## Streaming Plot Examples
+[mock sensor stream](http://plot.ly/~streaming-demos/6/)
+
 ##Installation
 ```javascript
 npm install plotly
 ```
+
 ##Usage
 ```javascript
 var plotly = require('plotly')('username','api_key');
@@ -23,6 +28,7 @@ plotly.plot(data,layout,function() {
   someReadableStream.pipe(stream);
 });
 ```
+
 ####Full REST API Documentation can be found [Here](https://plot.ly/api/rest/)
 
 You can sign up for Plotly [Here](https://plot.ly/) and obtain your API key and Stream Tokens from your [Settings](https://plot.ly/settings). 
@@ -36,6 +42,7 @@ Or, you can use the `signup()` method detailed below!
 ```javascript
 var plotly = require('plotly')();
 ```
+
 ##plotly.signup(desired_username,email[, callback])
 `desired_username` is a string representing your desired Plotly username    
 `email` is string containing your e-mail address    
@@ -55,6 +62,7 @@ plotly.signup(un, email, function (err, msg) {
 	console.log(msg);
 });
 ```
+
 ##plotly.plot(data,layout[, callback])
 `data` is an Object containing your trace data and styling information. [Docs](https://plot.ly/api/rest)  
 `layout` is an Object containing layout options for your graph. [Docs](https://plot.ly/api/rest)  
