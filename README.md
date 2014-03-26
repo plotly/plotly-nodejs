@@ -1,8 +1,8 @@
 #Plotly Node API
-Analyze and Visualize Data, Together.js		
+> Analyze and Visualize Data, Together		
 	
 	
-If you have a question about Streaming let us know!	
+If you have a question about streaming let us know or open an issue!	
 
 `ben@plot.ly` && `alexandre@plot.ly`
 
