@@ -30,9 +30,9 @@ plotly.plot(data,layout,function() {
 });
 ```
 
-####Full REST API Documentation can be found [Here](https://plot.ly/api/rest/)
+####Full REST API Documentation can be found here: [(https://plot.ly/api/rest/)](https://plot.ly/api/rest/)
 
-You can sign up for Plotly [Here](https://plot.ly/) and obtain your API key and Stream Tokens from your [Settings](https://plot.ly/settings). 
+Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
 
 Or, you can use the `signup()` method detailed below!
 
@@ -65,8 +65,9 @@ plotly.signup(un, email, function (err, msg) {
 ```
 
 ##plotly.plot(data,layout[, callback])
-`data` is an Object containing your trace data and styling information. [Docs](https://plot.ly/api/rest)  
-`layout` is an Object containing layout options for your graph. [Docs](https://plot.ly/api/rest)  
+Plotly graphs are described declaratively with a data JSON Object and a layout JSON Object. 
+`data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
+`layout` is an Object containing layout options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
@@ -167,7 +168,7 @@ Plotly.plot(data, layout, function (err, resp) {
     console.log(resp)
 
     var plotlystream = Plotly.stream(token, function () {})
-    var signalstream = Signal({tdelta: 100})
+    var signalstream = Signal({tdelta: 100}) // 
 
 
     plotlystream.on("error", function (err) {
