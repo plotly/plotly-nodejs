@@ -30,7 +30,7 @@ plotly.plot(data,layout,function() {
 });
 ```
 
-####Full REST API Documentation can be found here: [(https://plot.ly/api/rest/)](https://plot.ly/api/rest/)
+####Full REST API Documentation can be found here: [https://plot.ly/api/rest/](https://plot.ly/api/rest/)
 
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
 
