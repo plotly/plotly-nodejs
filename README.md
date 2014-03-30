@@ -34,7 +34,7 @@ plotly.plot(data,layout,function() {
 
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
 
-Or, you can use the `signup()` method detailed below!
+Or, you can use the `signup()` method detailed below.
 
 #Methods
 ##var plotly = require('plotly')(username, api_key)
