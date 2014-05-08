@@ -2,7 +2,7 @@
   "name": "plotly",
   "version": "0.2.3",
   "description": "Simple node.js wrapper for the plot.ly API",
-  "main": "plotly.js",
+  "main": "index.js",
   "devDependencies": {
     "random-signal": "0.0.2"
   },
