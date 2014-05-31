@@ -82,7 +82,7 @@ Plotly.prototype.plot = function(data, layout, callback) {
   if (typeof data === 'object' && typeof layout === 'function') {
     opts = data;
     callback = layout;
-    layout = opts.layout || {};
+    layout = opts.layout || {fileopt : "overwrite", filename : "node api"};;
     data = opts.data || [];
   }
 
