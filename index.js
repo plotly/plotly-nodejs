@@ -3,6 +3,7 @@ var version="0.0.2";
 var platform="nodejs";
 var origin="plot";
 var json_status = require('./statusmsgs.json');
+var host = 'plot.ly';
 
 module.exports = Plotly;
 
@@ -35,7 +36,7 @@ Plotly.prototype.signup = function(un, email, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: 'plot.ly',
+    host: host,
     port: 80,
     path: '/apimkacct',
     method: 'POST',
@@ -73,16 +74,16 @@ Plotly.prototype.signup = function(un, email, callback) {
   req.end();
 };
 
-Plotly.prototype.plot = function(data, layout, callback) {
+Plotly.prototype.plot = function(data, graph_options, callback) {
   var opts = {};
   /*
    * permit Plotly.plot(options, callback)
-   * where options is {data: [], layout: {}, host: host, port: port}.
+   * where options is {data: [], graph_options: {}, host: host, port: port}.
    */
-  if (typeof data === 'object' && typeof layout === 'function') {
+  if (typeof data === 'object' && typeof graph_options === 'function') {
     opts = data;
-    callback = layout;
-    layout = opts.layout || {fileopt : "overwrite", filename : "node api"};;
+    callback = graph_options;
+    graph_options = opts.graph_options || {fileopt : "overwrite", filename : "node api"};;
     data = opts.data || [];
   }
 
@@ -96,7 +97,7 @@ Plotly.prototype.plot = function(data, layout, callback) {
         'platform': platform,
         'version': version,
         'args': JSON.stringify(data),
-        'kwargs': JSON.stringify(layout),
+        'kwargs': JSON.stringify(graph_options),
         'un': this.username,
         'key': this.api_key,
         'origin': origin
@@ -110,7 +111,7 @@ Plotly.prototype.plot = function(data, layout, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: opts.host || 'plot.ly',
+    host: opts.host || host,
     port: opts.port || 80,
     path: '/clientresp',
     method: 'POST',
@@ -154,7 +155,7 @@ Plotly.prototype.stream = function(token, callback) {
     token = opts.token;
   }
   var options = {
-    host: opts.host || 'stream.plot.ly',
+    host: opts.host || 'stream'+host,
     port: opts.port || 80,
     path: '/',
     method: 'POST',
