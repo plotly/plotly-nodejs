@@ -20,9 +20,9 @@ npm install plotly
 var plotly = require('plotly')('username','api_key');
 
 var data = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
-var layout = {fileopt : "extend", filename : "nodenodenode"};
+var graph_options = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(data,layout,function() {
+plotly.plot(data,graph_options,function() {
   var stream = plotly.stream('your_streamtoken', function (res) {
     console.log(res);
   });
@@ -64,10 +64,10 @@ plotly.signup(un, email, function (err, msg) {
 });
 ```
 
-##plotly.plot(data,layout[, callback])
-Plotly graphs are described declaratively with a data JSON Object and a layout JSON Object. 
+##plotly.plot(data,graph_options[, callback])
+Plotly graphs are described declaratively with a data JSON Object and a graph_options JSON Object. 
 `data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
-`layout` is an Object containing layout options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
+`graph_options` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
@@ -77,9 +77,9 @@ The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.me
 var plotly = require('plotly')('your_username','your_apikey');
 
 var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
-var layout = {fileopt : "extend", filename : "nodenodenode"};
+var graph_options = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(data, layout, function (err, msg) {
+plotly.plot(data, graph_options, function (err, msg) {
 	console.log(msg);
 });
 ```
@@ -92,9 +92,9 @@ plotly.plot(data, layout, function (err, msg) {
 var plotly = require('plotly')('your_username','your_apikey');
 
 var initdata = [{x:[], y:[], stream:{token:'token', maxpoints:200}}];
-var initlayout = {fileopt : "extend", filename : "nodenodenode"};
+var initgraph_options = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(initdata, initlayout, function (err, msg) {
+plotly.plot(initdata, initgraph_options, function (err, msg) {
   if (err) return console.log(err)
   console.log(msg);
 
@@ -146,8 +146,8 @@ var data = {
   }
 }
 
-// build you layout and file options
-var layout = {
+// build your layout and file options
+var graph_options = {
     "filename": "streamSimpleSensor"
   , "fileopt": "overwrite"
   , "layout": {
@@ -162,7 +162,7 @@ var layout = {
  * you should get a "All Streams Go!" message
  */
 
-Plotly.plot(data, layout, function (err, resp) {
+Plotly.plot(data, graph_options, function (err, resp) {
     if (err) return console.log("ERROR", err)
 
     console.log(resp)
