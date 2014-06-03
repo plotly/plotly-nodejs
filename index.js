@@ -1,32 +1,34 @@
 var http = require('http');
-var version="0.0.2";
-var platform="nodejs";
-var origin="plot";
 var json_status = require('./statusmsgs.json');
-
+var url = require('url');
 module.exports = Plotly;
 
 function Plotly(username,api_key) {
     if (!(this instanceof Plotly))  {
         return new Plotly(username,api_key);
     }
+
     this.username = username;
     this.api_key = api_key;
-    return this;
+    this.host = '';
+    this.version="0.0.2";
+    this.platform="nodejs";
+    this.origin="plot";
 }
 
-Plotly.prototype.signup = function(un, email, callback) {
+Plotly.prototype.signup = function(username, email, callback) {
   var that = this;
-  if (typeof un === 'object' && typeof email === 'function') {
-    opts = un;
+  if (typeof username === 'object' && typeof email === 'function') {
+    opts = username;
     callback = email;
-    un = opts.un;
+    username = opts.username;
     email = opts.email;
+    host = opts.host;
   }
 
   if (!callback) { callback = function() {}; }
 
-  var pack = {'version': version, 'un': un, 'email': email, 'platform':platform };
+  var pack = {'version': this.version, 'un': username, 'email': email, 'platform':this.platform };
   var urlencoded = '';
 
   for (var key in pack) {
@@ -35,7 +37,7 @@ Plotly.prototype.signup = function(un, email, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: 'plot.ly',
+    host: opts.host || 'plot.ly',
     port: 80,
     path: '/apimkacct',
     method: 'POST',
@@ -73,17 +75,18 @@ Plotly.prototype.signup = function(un, email, callback) {
   req.end();
 };
 
-Plotly.prototype.plot = function(data, layout, callback) {
+Plotly.prototype.plot = function(data, graph_options, callback) {
   var opts = {};
   /*
    * permit Plotly.plot(options, callback)
-   * where options is {data: [], layout: {}, host: host, port: port}.
+   * where options is {data: [], graph_options: {}, host: host, port: port}.
    */
-  if (typeof data === 'object' && typeof layout === 'function') {
+  if (typeof data === 'object' && typeof graph_options === 'function') {
     opts = data;
-    callback = layout;
-    layout = opts.layout || {};
+    callback = graph_options;
+    graph_options = opts.graph_options || {fileopt : "overwrite", filename : "node api"};;
     data = opts.data || [];
+    host = opts.host || 'plot.ly'
   }
 
   if (!callback) { callback = function() {}; }
@@ -93,13 +96,13 @@ Plotly.prototype.plot = function(data, layout, callback) {
 
   var urlencoded = '';
   var pack = {
-        'platform': platform,
-        'version': version,
+        'platform': this.platform,
+        'version': this.version,
         'args': JSON.stringify(data),
-        'kwargs': JSON.stringify(layout),
+        'kwargs': JSON.stringify(graph_options),
         'un': this.username,
         'key': this.api_key,
-        'origin': origin
+        'origin': this.origin
         };
 
   for (var key in pack) {
@@ -136,6 +139,10 @@ Plotly.prototype.plot = function(data, layout, callback) {
         error: body.error
         });
       }
+      if ( body['stream-status'] != 'undefined') {
+        this.host = url.parse(body['stream-host']).hostname;
+      }
+      
     });
   });
 
@@ -154,7 +161,7 @@ Plotly.prototype.stream = function(token, callback) {
     token = opts.token;
   }
   var options = {
-    host: opts.host || 'stream.plot.ly',
+    host: this.host || opts.host || 'stream.plot.ly',
     port: opts.port || 80,
     path: '/',
     method: 'POST',
