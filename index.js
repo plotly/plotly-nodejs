@@ -84,8 +84,8 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
   if (typeof data === 'object' && typeof graph_options === 'function') {
     opts = data;
     callback = graph_options;
-    graph_options = opts.graph_options || {fileopt : "overwrite", filename : "node api"};;
-    data = opts.data || [];
+    graph_options = opts.graph_options || {fileopt : "overwrite", filename : "node api"};
+    data = opts.data || data || [];
     host = opts.host || 'plot.ly'
   }
 
@@ -139,10 +139,9 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
         error: body.error
         });
       }
-      if ( body['stream-status'] != 'undefined') {
+      if ( body['stream-status'] != undefined) {
         this.host = url.parse(body['stream-host']).hostname;
       }
-      
     });
   });
 
