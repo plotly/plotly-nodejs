@@ -189,7 +189,39 @@ Plotly.plot(data, graph_options, function (err, resp) {
 ```javascript
 var plotly = require('plotly')('your_username','your_apikey');
 
-plotly.get_figure('file_owner', 'file_id', function (figure) {
+plotly.get_figure('file_owner', 'file_id', function (err, figure) {
+    if (err) console.log(err);
     console.log(figure);
+});
+```
+
+##var plotly.save_image(figure, path)
+`figure` accepts a string of the file owners name   
+`path` is a string of the filepath and file name you wish to save the image as.
+
+```javascript
+var plotly = require('plotly')('username','api_key');
+
+var trace1 = {
+  x: [1, 2, 3, 4], 
+  y: [10, 15, 13, 17], 
+  type: "scatter"
+};
+
+var data = [trace1];
+
+plotly.save_image({'data': data}, 'path/to/image_name');
+```
+
+
+You can also use `get_figure()` and `save_image()` together! 
+```javascript
+var plotly = require('../.')('username','api_key');
+
+// grab the figure from an existing plot
+plotly.get_figure('file_owner', 'file_id', function (err, figure) {
+  if (err) console.log(err);
+  // now save that figure as a static image!
+  plotly.save_image(figure, 'path/to/image_name');
 });
 ```
