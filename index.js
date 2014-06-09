@@ -1,3 +1,4 @@
+var https = require('https');
 var http = require('http');
 var json_status = require('./statusmsgs.json');
 var url = require('url');
@@ -13,24 +14,26 @@ function Plotly(username,api_key) {
     return new Plotly(username,api_key);
   }
 
-  this.username = username;
-  this.api_key = api_key;
-  this.host = '';
+  if (typeof username === 'object') {
+    this.username = opts.username;
+    this.api_key = opts.api_key;
+    this.host = opts.host || 'plot.ly';
+    this.port = opts.port || 443;
+  } else {
+    this.username = username;
+    this.api_key = api_key;
+    this.host = 'plot.ly';
+    this.port = 443;
+  }
+  this.stream_host = '';
   this.version="0.0.2";
   this.platform="nodejs";
   this.origin="plot";
 }
 
 Plotly.prototype.signup = function(username, email, callback) {
-  var that = this;
-  if (typeof username === 'object' && typeof email === 'function') {
-    opts = username;
-    callback = email;
-    username = opts.username;
-    email = opts.email;
-    host = opts.host;
-  }
-
+  var self = this;
+  
   if (!callback) { callback = function() {}; }
 
   var pack = {'version': this.version, 'un': username, 'email': email, 'platform':this.platform };
@@ -42,8 +45,8 @@ Plotly.prototype.signup = function(username, email, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: opts.host || 'plot.ly',
-    port: 80,
+    host: self.host || 'plot.ly',
+    port: self.port || 443,
     path: '/apimkacct',
     method: 'POST',
     headers: {
@@ -52,14 +55,14 @@ Plotly.prototype.signup = function(username, email, callback) {
     }
   };
 
-  var req = http.request(options, function (res) {
+  var req = https.request(options, function (res) {
     parseRes(res, function (err, body) {
       body = JSON.parse(body);
       if (err || res.statusCode !== 200) {
         callback({err: err, body: body, statusCode: res.statusCode});
       } else {
-        that.username = body.un;
-        that.api_key = body.api_key;
+        self.username = body.un;
+        self.api_key = body.api_key;
         callback(null, {
           un: body.un,
           api_key: body.api_key,
@@ -81,19 +84,7 @@ Plotly.prototype.signup = function(username, email, callback) {
 };
 
 Plotly.prototype.plot = function(data, graph_options, callback) {
-  var opts = {};
-  /*
-   * permit Plotly.plot(options, callback)
-   * where options is {data: [], graph_options: {}, host: host, port: port}.
-   */
-   if (typeof data === 'object' && typeof graph_options === 'function') {
-    opts = data;
-    callback = graph_options;
-    graph_options = opts.graph_options || {fileopt : "overwrite", filename : "node api"};
-    data = opts.data || data || [];
-    host = opts.host || 'plot.ly'
-  }
-
+  var self = this;
   if (!callback) { callback = function() {}; }
 
   // allow users to just pass in an object for the data, data = {x:[],y:[]}
@@ -101,13 +92,13 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
 
   var urlencoded = '';
   var pack = {
-    'platform': this.platform,
-    'version': this.version,
+    'platform': self.platform,
+    'version': self.version,
     'args': JSON.stringify(data),
     'kwargs': JSON.stringify(graph_options),
-    'un': this.username,
-    'key': this.api_key,
-    'origin': this.origin
+    'un': self.username,
+    'key': self.api_key,
+    'origin': self.origin
   };
 
   for (var key in pack) {
@@ -118,8 +109,8 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
   urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    host: opts.host || 'plot.ly',
-    port: opts.port || 80,
+    host: self.host,
+    port: self.port,
     path: '/clientresp',
     method: 'POST',
     headers: {
@@ -129,9 +120,12 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
     withCredentials: false
   };
 
-  var req = http.request(options, function (res) {
+  var req = https.request(options, function (res) {
     parseRes(res, function (err, body) {
       body = JSON.parse(body);
+      if ( body['stream-status'] != undefined) {
+        self.stream_host = url.parse(body['stream-host']).hostname;
+      }
       if ( body.error.length > 0 ) {
         callback({msg: body.error, body: body, statusCode: res.statusCode});
       } else {
@@ -144,9 +138,7 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
           error: body.error
         });
       }
-      if ( body['stream-status'] != undefined) {
-        this.host = url.parse(body['stream-host']).hostname;
-      }
+      
     });
   });
 
@@ -159,14 +151,11 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
 };
 
 Plotly.prototype.stream = function(token, callback) {
-  var opts = {};
-  if (typeof token === "object") {
-    opts = token
-    token = opts.token;
-  }
+  var self = this;
+
   var options = {
-    host: this.host || opts.host || 'stream.plot.ly',
-    port: opts.port || 80,
+    host: self.stream_host || 'stream.plot.ly',
+    port: 80,
     path: '/',
     method: 'POST',
     agent: false,
@@ -190,18 +179,7 @@ Plotly.prototype.stream = function(token, callback) {
 
 
 Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
-
-  var opts = {};
-  if (typeof file_owner === 'object' && typeof file_id === 'function') {
-    opts = file_owner;
-    file_owner = opts.file_owner;
-    file_id = opts.file_id;
-    host = opts.host || 'plot.ly';
-    port = opts.port || 80;
-  } else {
-    host = 'plot.ly';
-    port = 80;
-  }
+  var self = this;
 
   if (!callback) { callback = function() {}; }
 
@@ -215,7 +193,7 @@ Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
   var resource = '/apigetfile/'+file_owner+'/'+file_id;
 
   var options = {
-    url: 'https://' + host + resource,
+    url: 'https://' + self.host + resource,
     headers: headers,
     method: 'GET'
   };
@@ -231,25 +209,33 @@ Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
 }
 
 Plotly.prototype.save_image = function (figure, path, callback) {
-  var host = 'plot.ly';
+  var self = this;
 
   var headers = {
-    'plotly-username': this.username,
-    'plotly-apikey': this.api_key,
-    'plotly-version': this.version,
-    'plotly-platform': this.platform
+    'plotly-username': self.username,
+    'plotly-apikey': self.api_key,
+    'plotly-version': self.version,
+    'plotly-platform': self.platform
   };
 
+  if (self.port === 443) {
+    protocol_str = 'https://'
+  } else {
+    protocol_str = 'http://'
+  }
+
   var options = {
-    url: 'https://' + host + '/apigenimage/',
+    url: protocol_str + self.host + '/apigenimage/',
     headers: headers,
     method: 'POST',
     body: JSON.stringify(figure)
   };
 
+  //console.log(options);
+
   request.post(options, function (err, res, body) {
-    if (err) {
-      callback(err)
+    if (JSON.parse(body).error) {
+      callback(JSON.parse(body).error);
     } else {
       var image = JSON.parse(body).payload;
       writeFile(path, image, function (err) {
