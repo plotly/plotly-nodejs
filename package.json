@@ -21,5 +21,8 @@
     "visualization"
   ],
   "author": "Alexander Daniel <alex@lesinstruments.com> (http://lesinstruments.com/)",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "request": "~2.36.0"
+  }
 }

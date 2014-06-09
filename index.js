@@ -1,6 +1,7 @@
 var http = require('http');
 var json_status = require('./statusmsgs.json');
 var url = require('url');
+var request = require('request');
 module.exports = Plotly;
 
 function Plotly(username,api_key) {
@@ -182,6 +183,44 @@ Plotly.prototype.stream = function(token, callback) {
   if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
   return stream;
 };
+
+
+Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
+  
+  var opts = {};
+  if (typeof file_owner === 'object' && typeof file_id === 'function') {
+    opts = file_owner;
+    file_owner = opts.file_owner;
+    file_id = opts.file_id;
+    host = opts.host || 'plot.ly';
+    port = opts.port || 80;
+  } else {
+    host = 'plot.ly';
+    port = 80;
+  }
+
+  if (!callback) { callback = function() {}; }
+  
+  var headers = {
+    'plotly-username': this.username,
+    'plotly-apikey': this.api_key,
+    'plotly-version': this.version,
+    'plotly-platform': this.platform
+  };
+
+  var resource = '/apigetfile/'+file_owner+'/'+file_id;
+
+  var options = {
+    url: 'https://' + host + resource,
+    headers: headers,
+    method: 'GET'
+  };
+
+  request(options, function (err, res, body) {
+    var figure = JSON.parse(body).payload.figure;
+    callback(figure);
+  });
+}
 
 // response parse helper fn
 function parseRes (res, cb) {
