@@ -257,6 +257,7 @@ Plotly.prototype.save_image = function (figure, path, callback) {
 					callback(err);
 				} else {
 					console.log('image saved!');
+					callback(null);
 				}
 			});
 		}
