@@ -1,4 +1,4 @@
-var http = require('https');
+var http = require('http');
 var json_status = require('./statusmsgs.json');
 var url = require('url');
 var request = require('request');
@@ -39,7 +39,7 @@ Plotly.prototype.signup = function(username, email, callback) {
 
   var options = {
     host: opts.host || 'plot.ly',
-    port: 443,
+    port: 80,
     path: '/apimkacct',
     method: 'POST',
     headers: {
