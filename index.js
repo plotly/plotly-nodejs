@@ -15,6 +15,7 @@ function Plotly(username,api_key) {
   }
 
   if (typeof username === 'object') {
+    username = opts;
     this.username = opts.username;
     this.api_key = opts.api_key;
     this.host = opts.host || 'plot.ly';
