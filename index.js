@@ -230,7 +230,7 @@ Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
 	});
 }
 
-Plotly.prototype.save_image = function (figure, path) {
+Plotly.prototype.save_image = function (figure, path, callback) {
 	var host = 'plot.ly';
 
 	var headers = {
@@ -248,14 +248,18 @@ Plotly.prototype.save_image = function (figure, path) {
 	};
 
 	request.post(options, function (err, res, body) {
-		var image = JSON.parse(body).payload;
-		writeFile(path, image, function (err) {
-			if (err) {
-				console.log(err);
-			} else {
-				console.log('image saved!');
-			}
-		});
+		if (err) {
+			callback(err)
+		} else {
+			var image = JSON.parse(body).payload;
+			writeFile(path, image, function (err) {
+				if (err) {
+					callback(err);
+				} else {
+					console.log('image saved!');
+				}
+			});
+		}
 	});
 }
 

@@ -195,10 +195,10 @@ plotly.get_figure('file_owner', 'file_id', function (err, figure) {
 });
 ```
 
-##var plotly.save_image(figure, path)
+##var plotly.save_image(figure, path[, callback])
 `figure` accepts a string of the file owners name   
 `path` is a string of the filepath and file name you wish to save the image as.
-
+`callback(err)` is a function, where `err` is an Error Object.
 ```javascript
 var plotly = require('plotly')('username','api_key');
 
@@ -210,7 +210,9 @@ var trace1 = {
 
 var data = [trace1];
 
-plotly.save_image({'data': data}, 'path/to/image_name');
+plotly.save_image({'data': data}, 'path/to/image_name', function (err) {
+  if (err) console.log(err);
+});
 ```
 
 
@@ -222,6 +224,8 @@ var plotly = require('../.')('username','api_key');
 plotly.get_figure('file_owner', 'file_id', function (err, figure) {
   if (err) console.log(err);
   // now save that figure as a static image!
-  plotly.save_image(figure, 'path/to/image_name');
+  plotly.save_image(figure, 'path/to/image_name', function (err) {
+    if (err) console.log(err);
+  });
 });
 ```
