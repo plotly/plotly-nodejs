@@ -181,3 +181,13 @@ Plotly.plot(data, graph_options, function (err, resp) {
 ```
 
 
+##var plotly.get_figure(file_owner, file_id[, callback])
+`file_ownder` accepts a string of the file owners name   
+`file_id` is an integer, representing the graph ID.
+`callback(figure)` where `figure` is a the response object of the graph figure.
+
+```javascript
+plotly.get_figure('file_owner', 'file_id', function (figure) {
+    console.log(figure);
+});
+```
