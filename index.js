@@ -65,6 +65,7 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
 
   var options = {
     url: 'https://' + self.host + '/clientresp',
+    port: self.port,
     headers: headers,
     method: 'POST',
     body: payload
@@ -129,7 +130,8 @@ Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
   var options = {
     url: 'https://' + self.host + resource,
     headers: headers,
-    method: 'GET'
+    method: 'GET',
+    port: self.port
   };
 
   request(options, function (err, res, body) {
@@ -162,7 +164,8 @@ Plotly.prototype.save_image = function (figure, path, callback) {
     url: protocol_str + self.host + '/apigenimage/',
     headers: headers,
     method: 'POST',
-    body: JSON.stringify(figure)
+    body: JSON.stringify(figure),
+    port: self.port
   };
 
   //console.log(options);

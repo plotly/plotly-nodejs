@@ -39,7 +39,7 @@ Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your AP
 `username` is a string containing your username    
 `api_key` is a string containing your API key   
 ```javascript
-var plotly = require('plotly')();
+var plotly = require('plotly')('username', 'api_key');
 ```
 
 ##plotly.plot(data,graph_options[, callback])
