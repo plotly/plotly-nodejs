@@ -34,34 +34,12 @@ plotly.plot(data,graph_options,function() {
 
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
 
-Or, you can use the `signup()` method detailed below.
-
 #Methods
 ##var plotly = require('plotly')(username, api_key)
 `username` is a string containing your username    
 `api_key` is a string containing your API key   
 ```javascript
 var plotly = require('plotly')();
-```
-
-##plotly.signup(desired_username,email[, callback])
-`desired_username` is a string representing your desired Plotly username    
-`email` is string containing your e-mail address    
-`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	 
-	
-The `msg` object has the following attributes : `msg.un`,`msg.api_key`,`msg.tmp_pw`,`msg.message`,`msg.statusCode`, `msg.error`	
-
-```javascript
-// examples/signup-example.js
-
-var plotly = require('plotly')();
-
-var un = 'desired_username';
-var email = 'your_email@email.com';
-
-plotly.signup(un, email, function (err, msg) {
-	console.log(msg);
-});
 ```
 
 ##plotly.plot(data,graph_options[, callback])
