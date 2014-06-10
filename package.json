@@ -23,7 +23,7 @@
   "author": "Alexander Daniel <alex@lesinstruments.com> (http://lesinstruments.com/)",
   "license": "MIT",
   "dependencies": {
-    "request": "~2.36.0",
-    "mkdirp": "~0.5.0"
+    "mkdirp": "~0.5.0",
+    "request": "^2.36.0"
   }
 }

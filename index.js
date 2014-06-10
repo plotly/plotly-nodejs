@@ -32,58 +32,6 @@ function Plotly(username,api_key) {
   this.origin="plot";
 }
 
-Plotly.prototype.signup = function(username, email, callback) {
-  var self = this;
-  
-  if (!callback) { callback = function() {}; }
-
-  var pack = {'version': this.version, 'un': username, 'email': email, 'platform':this.platform };
-  var urlencoded = '';
-
-  for (var key in pack) {
-    urlencoded += key + "=" + pack[key] + "&";
-  }
-  urlencoded = urlencoded.substring(0, urlencoded.length - 1);
-
-  var options = {
-    host: self.host || 'plot.ly',
-    port: self.port || 443,
-    path: '/apimkacct',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': urlencoded.length
-    }
-  };
-
-  var req = https.request(options, function (res) {
-    parseRes(res, function (err, body) {
-      body = JSON.parse(body);
-      if (err || res.statusCode !== 200) {
-        callback({err: err, body: body, statusCode: res.statusCode});
-      } else {
-        self.username = body.un;
-        self.api_key = body.api_key;
-        callback(null, {
-          un: body.un,
-          api_key: body.api_key,
-          tmp_pw: body.tmp_pw,
-          msg: body.message,
-          error: body.error,
-          statusCode: res.statusCode
-        });
-      }
-    });
-  });
-
-  req.on('error', function(err) {
-    callback(err);
-  });
-
-  req.write(urlencoded);
-  req.end();
-};
-
 Plotly.prototype.plot = function(data, graph_options, callback) {
   var self = this;
   if (!callback) { callback = function() {}; }
@@ -107,48 +55,31 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
   }
 
   // trim off last ambersand
-  urlencoded = urlencoded.substring(0, urlencoded.length - 1);
-
-  var options = {
-    host: self.host,
-    port: self.port,
-    path: '/clientresp',
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': urlencoded.length
-    },
-    withCredentials: false
+  var payload = urlencoded.substring(0, urlencoded.length - 1);
+  
+  var headers = {
+    'plotly-username': this.username,
+    'plotly-apikey': this.api_key,
+    'plotly-version': this.version,
+    'plotly-platform': this.platform
   };
 
-  var req = https.request(options, function (res) {
-    parseRes(res, function (err, body) {
-      body = JSON.parse(body);
-      if ( body['stream-status'] != undefined) {
-        self.stream_host = url.parse(body['stream-host']).hostname;
-      }
-      if ( body.error.length > 0 ) {
-        callback({msg: body.error, body: body, statusCode: res.statusCode});
-      } else {
-        callback(null, {
-          streamstatus : body['stream-status'],
-          url: body.url,
-          message: body.message,
-          warning: body.warning,
-          filename: body.filename,
-          error: body.error
-        });
-      }
-      
-    });
+  var options = {
+    url: 'https://' + self.host + '/clientresp',
+    headers: headers,
+    method: 'POST',
+    body: payload
+  };
+
+  request(options, function (err, res, body) {
+    if (JSON.parse(body).error) {
+      callback(JSON.parse(body).error);
+    } else {
+      var msg = JSON.parse(body);
+      callback(null, msg);
+    }
   });
 
-  req.on('error', function(err) {
-    callback(err);
-  });
-
-  req.write(urlencoded);
-  req.end();
 };
 
 Plotly.prototype.stream = function(token, callback) {
