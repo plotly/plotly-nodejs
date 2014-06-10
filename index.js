@@ -1,4 +1,3 @@
-var https = require('https');
 var http = require('http');
 var json_status = require('./statusmsgs.json');
 var url = require('url');
@@ -76,6 +75,9 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
       callback(JSON.parse(body).error);
     } else {
       var msg = JSON.parse(body);
+      if ( msg['stream-status'] != undefined) {
+        this.host = url.parse(msg['stream-host']).hostname;
+      }
       callback(null, msg);
     }
   });
