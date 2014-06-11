@@ -1,3 +1,4 @@
+var https = require('https');
 var http = require('http');
 var json_status = require('./statusmsgs.json');
 var url = require('url');
@@ -14,7 +15,6 @@ function Plotly(username,api_key) {
   }
 
   if (typeof username === 'object') {
-    username = opts;
     this.username = opts.username;
     this.api_key = opts.api_key;
     this.host = opts.host || 'plot.ly';
@@ -54,35 +54,48 @@ Plotly.prototype.plot = function(data, graph_options, callback) {
   }
 
   // trim off last ambersand
-  var payload = urlencoded.substring(0, urlencoded.length - 1);
-  
-  var headers = {
-    'plotly-username': this.username,
-    'plotly-apikey': this.api_key,
-    'plotly-version': this.version,
-    'plotly-platform': this.platform
-  };
+  urlencoded = urlencoded.substring(0, urlencoded.length - 1);
 
   var options = {
-    url: 'https://' + self.host + '/clientresp',
+    host: self.host,
     port: self.port,
-    headers: headers,
+    path: '/clientresp',
     method: 'POST',
-    body: payload
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': urlencoded.length
+    },
+    withCredentials: false
   };
 
-  request(options, function (err, res, body) {
-    if (JSON.parse(body).error) {
-      callback(JSON.parse(body).error);
-    } else {
-      var msg = JSON.parse(body);
-      if ( msg['stream-status'] != undefined) {
-        this.host = url.parse(msg['stream-host']).hostname;
+  var req = https.request(options, function (res) {
+    parseRes(res, function (err, body) {
+      body = JSON.parse(body);
+      if ( body['stream-status'] != undefined) {
+        self.stream_host = url.parse(body['stream-host']).hostname;
       }
-      callback(null, msg);
-    }
+      if ( body.error.length > 0 ) {
+        callback({msg: body.error, body: body, statusCode: res.statusCode});
+      } else {
+        callback(null, {
+          streamstatus : body['stream-status'],
+          url: body.url,
+          message: body.message,
+          warning: body.warning,
+          filename: body.filename,
+          error: body.error
+        });
+      }
+      
+    });
   });
 
+  req.on('error', function(err) {
+    callback(err);
+  });
+
+  req.write(urlencoded);
+  req.end();
 };
 
 Plotly.prototype.stream = function(token, callback) {
@@ -128,71 +141,83 @@ Plotly.prototype.get_figure = function (file_owner, file_id, callback) {
   var resource = '/apigetfile/'+file_owner+'/'+file_id;
 
   var options = {
-    url: 'https://' + self.host + resource,
+    host: self.host,
+    path: resource,
+    port: self.port,
     headers: headers,
-    method: 'GET',
-    port: self.port
+    method: 'GET'
   };
 
-  request(options, function (err, res, body) {
-    if (JSON.parse(body).error) {
-      callback(JSON.parse(body).error);
-    } else {
-      var figure = JSON.parse(body).payload.figure;
-      callback(null, figure);
-    }
+  var req = https.get(options, function (res) {
+    parseRes(res, function (err, body) {
+      if (JSON.parse(body).error) {
+        var err = JSON.parse(body).error;
+        callback(err);
+      } else {
+        var figure = JSON.parse(body).payload.figure;
+        callback(null, figure);
+      }
+      
+    })
   });
+
+  req.end();
 }
 
 Plotly.prototype.save_image = function (figure, path, callback) {
   var self = this;
+  figure = JSON.stringify(figure);
 
   var headers = {
     'plotly-username': self.username,
     'plotly-apikey': self.api_key,
     'plotly-version': self.version,
-    'plotly-platform': self.platform
+    'plotly-platform': self.platform,
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Length': figure.length
   };
 
-  if (self.port === 443) {
-    protocol_str = 'https://'
-  } else {
-    protocol_str = 'http://'
-  }
-
   var options = {
-    url: protocol_str + self.host + '/apigenimage/',
+    hostname: self.host,
+    path : '/apigenimage/',
+    port: self.port,
     headers: headers,
     method: 'POST',
-    body: JSON.stringify(figure),
-    port: self.port
+    agent: false
   };
 
   //console.log(options);
 
-  request.post(options, function (err, res, body) {
-    if (JSON.parse(body).error) {
-      callback(JSON.parse(body).error);
+  var req = https.request(options, function (res) {
+    if (res.statusCode !== 200) {
+      callback(res.statusCode);
     } else {
-      var image = JSON.parse(body).payload;
-      writeFile(path, image, function (err) {
+      parseRes(res, function (err, body) {
         if (err) {
           callback(err);
         } else {
-          console.log('image saved!');
-          callback(null);
+          var image = JSON.parse(body).payload;
+          writeFile(path, image, function (err) {
+            if (err) callback(err);
+            console.log('image saved!');
+          })
         }
       });
     }
   });
+
+  req.write(figure);
+  req.end();
 }
 
 
 // helper fn to create folders if they don't exist in the path
-function writeFile (path, image, cb) {
+function writeFile (path, image, callback) {
   mkdirp(getDirName(path), function (err) {
-    if (err) return cb(err)
-      fs.writeFile(path + '.png', image, 'base64', cb)
+    if (err) return callback(err)
+      fs.writeFile(path + '.png', image, 'base64', function () {
+        callback(null);
+      })
   });
 }
 
@@ -204,8 +229,9 @@ function parseRes (res, cb) {
     res.setEncoding('utf-8');
   }
   res.on('data', function (data) {
+    //console.log(data);
     body += data;
-    if (body.length > 1e4) {
+    if (body.length > 1e10) {
       // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQ
       res.connection.destroy();
       res.writeHead(413, {'Content-Type': 'text/plain'});
