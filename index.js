@@ -2,7 +2,6 @@ var https = require('https');
 var http = require('http');
 var jsonStatus = require('./statusmsgs.json');
 var url = require('url');
-var request = require('request');
 var fs = require('fs');
 var mkdirp = require("mkdirp");
 var getDirName = require("path").dirname;
