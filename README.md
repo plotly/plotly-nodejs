@@ -17,13 +17,13 @@ npm install plotly
 
 ##Usage
 ```javascript
-var plotly = require('plotly')('username','api_key');
+var plotly = require('plotly')('username','apiKey');
 
-var data = [{x:[], y:[], stream:{token:'your_streamtoken', maxpoints:200}}];
-var graph_options = {fileopt : "extend", filename : "nodenodenode"};
+var data = [{x:[], y:[], stream:{token:'yourStreamtoken', maxpoints:200}}];
+var graphOptions = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(data,graph_options,function() {
-  var stream = plotly.stream('your_streamtoken', function (res) {
+plotly.plot(data,graphOptions,function() {
+  var stream = plotly.stream('yourStreamtoken', function (res) {
     console.log(res);
   });
   someReadableStream.pipe(stream);
@@ -35,29 +35,29 @@ plotly.plot(data,graph_options,function() {
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
 
 #Methods
-##var plotly = require('plotly')(username, api_key)
+##var plotly = require('plotly')(username, apiKey)
 `username` is a string containing your username    
-`api_key` is a string containing your API key   
+`apiKey` is a string containing your API key   
 ```javascript
-var plotly = require('plotly')('username', 'api_key');
+var plotly = require('plotly')('username', 'apiKey');
 ```
 
-##plotly.plot(data,graph_options[, callback])
-Plotly graphs are described declaratively with a data JSON Object and a graph_options JSON Object. 
+##plotly.plot(data,graphOptions[, callback])
+Plotly graphs are described declaratively with a data JSON Object and a graphOptions JSON Object. 
 `data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
-`graph_options` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
+`graphOptions` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
 ```javascript
 // examples/rest-example.js
 
-var plotly = require('plotly')('your_username','your_apikey');
+var plotly = require('plotly')('username','apiKey');
 
 var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
-var graph_options = {fileopt : "extend", filename : "nodenodenode"};
+var graphOptions = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(data, graph_options, function (err, msg) {
+plotly.plot(data, graphOptions, function (err, msg) {
 	console.log(msg);
 });
 ```
@@ -67,12 +67,12 @@ plotly.plot(data, graph_options, function (err, msg) {
 
 ```javascript
 // examples/streaming-example.js
-var plotly = require('plotly')('your_username','your_apikey');
+var plotly = require('plotly')('username','apiKey');
 
-var initdata = [{x:[], y:[], stream:{token:'token', maxpoints:200}}];
-var initgraph_options = {fileopt : "extend", filename : "nodenodenode"};
+var initData = [{x:[], y:[], stream:{token:'token', maxpoints:200}}];
+var initGraphOptions = {fileopt : "extend", filename : "nodenodenode"};
 
-plotly.plot(initdata, initgraph_options, function (err, msg) {
+plotly.plot(initData, initGraphOptions, function (err, msg) {
   if (err) return console.log(err)
   console.log(msg);
 
@@ -100,9 +100,9 @@ plotly.plot(initdata, initgraph_options, function (err, msg) {
  */
 var config = require('./config.json')
   , username = config['user']
-  , apikey = config['apikey']
+  , apiKey = config['apiKey']
   , token = config['token']
-  , Plotly = require('../.')(username, apikey)
+  , Plotly = require('../.')(username, apiKey)
   , Signal = require('random-signal')
 
 
@@ -125,7 +125,7 @@ var data = {
 }
 
 // build your layout and file options
-var graph_options = {
+var graphOptions = {
     "filename": "streamSimpleSensor"
   , "fileopt": "overwrite"
   , "layout": {
@@ -140,7 +140,7 @@ var graph_options = {
  * you should get a "All Streams Go!" message
  */
 
-Plotly.plot(data, graph_options, function (err, resp) {
+Plotly.plot(data, graphOptions, function (err, resp) {
     if (err) return console.log("ERROR", err)
 
     console.log(resp)
@@ -159,26 +159,26 @@ Plotly.plot(data, graph_options, function (err, resp) {
 ```
 
 
-##var plotly.get_figure(file_owner, file_id[, callback])
+##var plotly.getFigure(fileOwner, fileId[, callback])
 `file_ownder` accepts a string of the file owners name   
-`file_id` is an integer, representing the graph ID.
+`fileId` is an integer, representing the graph ID.
 `callback(figure)` where `figure` is a the JSON object of the graph figure.
 
 ```javascript
-var plotly = require('plotly')('your_username','your_apikey');
+var plotly = require('plotly')('username','apiKey');
 
-plotly.get_figure('file_owner', 'file_id', function (err, figure) {
+plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
     if (err) console.log(err);
     console.log(figure);
 });
 ```
 
-##var plotly.save_image(figure, path[, callback])
+##var plotly.saveImage(figure, path[, callback])
 `figure` accepts a string of the file owners name   
 `path` is a string of the filepath and file name you wish to save the image as.
 `callback(err)` is a function, where `err` is an Error Object.
 ```javascript
-var plotly = require('plotly')('username','api_key');
+var plotly = require('plotly')('username','apiKey');
 
 var trace1 = {
   x: [1, 2, 3, 4], 
@@ -188,21 +188,21 @@ var trace1 = {
 
 var data = [trace1];
 
-plotly.save_image({'data': data}, 'path/to/image_name', function (err) {
+plotly.saveImage({'data': data}, 'path/to/image_name', function (err) {
   if (err) console.log(err);
 });
 ```
 
 
-You can also use `get_figure()` and `save_image()` together! 
+You can also use `getFigure()` and `saveImage()` together! 
 ```javascript
-var plotly = require('../.')('username','api_key');
+var plotly = require('../.')('username','apiKey');
 
 // grab the figure from an existing plot
-plotly.get_figure('file_owner', 'file_id', function (err, figure) {
+plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
   if (err) console.log(err);
   // now save that figure as a static image!
-  plotly.save_image(figure, 'path/to/image_name', function (err) {
+  plotly.saveImage(figure, 'path/to/image_name', function (err) {
     if (err) console.log(err);
   });
 });
