@@ -186,8 +186,6 @@ Plotly.prototype.save_image = function (figure, path, callback) {
     agent: false
   };
 
-  //console.log(options);
-
   var req = https.request(options, function (res) {
     if (res.statusCode !== 200) {
       callback(res.statusCode);
