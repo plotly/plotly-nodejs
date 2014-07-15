@@ -13,7 +13,10 @@ function Plotly(username,apiKey) {
     return new Plotly(username,apiKey);
   }
 
+  var opts = {};
+
   if (typeof username === 'object') {
+    opts = username;
     this.username = opts.username;
     this.apiKey = opts.apiKey;
     this.host = opts.host || 'plot.ly';
