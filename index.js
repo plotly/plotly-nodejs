@@ -99,10 +99,18 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
 
 Plotly.prototype.stream = function(token, callback) {
   var self = this;
+  var opts = {};
+
+  if (typeof token === 'object') {
+    opts = token;
+    token = opts.token;
+    var host = opts.streamHost || self.streamHost;
+    var port = opts.port || 80;
+  }
 
   var options = {
-    host: self.streamHost || 'stream.plot.ly',
-    port: 80,
+    host: host || self.streamHost || 'stream.plot.ly',
+    port: port || 80,
     path: '/',
     method: 'POST',
     agent: false,
