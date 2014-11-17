@@ -176,12 +176,12 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
 Plotly.prototype.saveImage = function (figure, path, callback) {
   var self = this;
-	if(!callback) {
-		callback = function(err) {
-			if(err) { console.error(err); }
-			else { console.log('image saved!') ;}
-		};
-	}
+  if(!callback) {
+    callback = function(err) {
+      if(err) { console.error(err); }
+      else { console.log('image saved!') ;}
+    };
+  }
   figure = JSON.stringify(figure);
 
   var headers = {
@@ -213,7 +213,7 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
           var image = JSON.parse(body).payload;
           writeFile(path, image, function (err) {
             if (err) return callback(err);
-						callback(null);
+            callback(null);
           });
         }
       });
