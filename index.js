@@ -88,7 +88,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
           error: body.error
         });
       }
-      
+
     });
   });
 
@@ -167,7 +167,7 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
         var figure = JSON.parse(body).payload.figure;
         callback(null, figure);
       }
-      
+
     })
   });
 
@@ -176,6 +176,12 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
 Plotly.prototype.saveImage = function (figure, path, callback) {
   var self = this;
+	if(!callback) {
+		callback = function(err) {
+			if(err) { console.error(err); }
+			else { console.log('image saved!') ;}
+		};
+	}
   figure = JSON.stringify(figure);
 
   var headers = {
@@ -206,9 +212,9 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
         } else {
           var image = JSON.parse(body).payload;
           writeFile(path, image, function (err) {
-            if (err) callback(err);
-            console.log('image saved!');
-          })
+            if (err) return callback(err);
+						callback(null);
+          });
         }
       });
     }
@@ -216,7 +222,7 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
 
   req.write(figure);
   req.end();
-}
+};
 
 
 // helper fn to create folders if they don't exist in the path
