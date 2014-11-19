@@ -161,18 +161,17 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
   var req = https.get(options, function (res) {
     parseRes(res, function (err, body) {
       if (JSON.parse(body).error) {
-        var err = JSON.parse(body).error;
-        callback(err);
+        callback(JSON.parse(body).error);
       } else {
         var figure = JSON.parse(body).payload.figure;
         callback(null, figure);
       }
 
-    })
+    });
   });
 
   req.end();
-}
+};
 
 Plotly.prototype.saveImage = function (figure, path, callback) {
   var self = this;
@@ -197,23 +196,35 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
     agent: false
   };
 
+	var _errored = false;
   var req = https.request(options, function (res) {
     if (res.statusCode !== 200) {
       callback(res.statusCode);
     } else {
       parseRes(res, function (err, body) {
+				if(_errored) { return; }
         if (err) {
+					_errored = true;
           callback(err);
         } else {
           var image = JSON.parse(body).payload;
           writeFile(path, image, function (err) {
-            if (err) return callback(err);
+            if (err) {
+							_errored = true;
+							return callback(err);
+						}
             callback(null);
           });
         }
       });
     }
   });
+
+	req.on('error', function(err) {
+		if(_errored) { return; }
+		_errored = true;
+		callback(err.message);
+	});
 
   req.write(figure);
   req.end();
@@ -223,10 +234,10 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
 // helper fn to create folders if they don't exist in the path
 function writeFile (path, image, callback) {
   mkdirp(getDirName(path), function (err) {
-    if (err) return callback(err)
+    if (err) return callback(err);
       fs.writeFile(path + '.png', image, 'base64', function () {
         callback(null);
-      })
+      });
   });
 }
 
