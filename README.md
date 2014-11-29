@@ -159,10 +159,10 @@ Plotly.plot(data, graphOptions, function (err, resp) {
 ```
 
 
-##var plotly.getFigure(fileOwner, fileId[, callback])
-`file_ownder` accepts a string of the file owners name   
-`fileId` is an integer, representing the graph ID.
-`callback(figure)` where `figure` is a the JSON object of the graph figure.
+##plotly.getFigure(fileOwner, fileId[, callback])
+`file_owner` accepts a string of the file owner's name   
+`fileId` is an integer, representing the graph ID   
+`callback(figure)` where `figure` is a the JSON object of the graph figure
 
 ```javascript
 var plotly = require('plotly')('username','apiKey');
@@ -173,10 +173,10 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 });
 ```
 
-##var plotly.saveImage(figure, path[, callback])
-`figure` accepts a string of the file owners name   
-`path` is a string of the filepath and file name you wish to save the image as.
-`callback(err)` is a function, where `err` is an Error Object.
+##plotly.saveImage(figure, path[, callback])
+`figure` is a JSON object of the graph figure, for example the `figure` returned by `plotly.getFigure` placed inside an associative array with the key `figure`  
+`path` is a string of the filepath and file name you wish to save the image as  
+`callback(err)`  where `err` is an Error Object
 ```javascript
 var plotly = require('plotly')('username','apiKey');
 
@@ -186,9 +186,12 @@ var trace1 = {
   type: "scatter"
 };
 
-var data = [trace1];
+var figure = { 'data': [trace1] };
+var payload = {
+  'figure': figure
+};
 
-plotly.saveImage({'data': data}, 'path/to/image_name', function (err) {
+plotly.saveImage(payload, 'path/to/image', function(err) {
   if (err) console.log(err);
 });
 ```
@@ -202,7 +205,10 @@ var plotly = require('../.')('username','apiKey');
 plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
   if (err) console.log(err);
   // now save that figure as a static image!
-  plotly.saveImage(figure, 'path/to/image_name', function (err) {
+  var payload = {
+    'figure': figure
+  }
+  plotly.saveImage(payload, 'path/to/image_name', function (err) {
     if (err) console.log(err);
   });
 });
