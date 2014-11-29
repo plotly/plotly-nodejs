@@ -176,6 +176,8 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
 Plotly.prototype.saveImage = function (figure, path, callback) {
   var self = this;
+  callback = callback || function() {};
+
   figure = JSON.stringify(figure);
 
   var headers = {
@@ -206,8 +208,7 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
         } else {
           var image = JSON.parse(body).payload;
           writeFile(path, image, function (err) {
-            if (err) callback(err);
-            console.log('image saved!');
+            callback(err);
           })
         }
       });
@@ -222,10 +223,11 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
 // helper fn to create folders if they don't exist in the path
 function writeFile (path, image, callback) {
   mkdirp(getDirName(path), function (err) {
-    if (err) return callback(err)
-      fs.writeFile(path + '.png', image, 'base64', function () {
-        callback(null);
-      })
+    if (err)
+        callback(err);
+    fs.writeFile(path + '.png', image, 'base64', function () {
+      callback(null);
+    });
   });
 }
 
