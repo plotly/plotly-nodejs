@@ -1,7 +1,17 @@
 var plotly = require('../.')('username','api_key');
 
-plotly.get_figure('file_owner', 'file_id', function (err, figure) {
-	if (err) console.log(err);
-	// now save that figure as a static image!
-	plotly.save_image(figure, 'path/to/image_name');
+plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
+    if (err) console.log(err);
+
+    var payload = {
+        'figure': figure
+    };
+
+    // now save that figure as a static image!
+    plotly.saveImage(payload, 'path/to/image', function(err) {
+        if (err)
+            console.log(err);
+        else
+            console.log("Image saved!");
+    });
 });
