@@ -207,9 +207,7 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
           callback(err);
         } else {
           var image = JSON.parse(body).payload;
-          writeFile(path, image, function (err) {
-            callback(err);
-          })
+          writeFile(path, image, callback);
         }
       });
     }
@@ -225,9 +223,7 @@ function writeFile (path, image, callback) {
   mkdirp(getDirName(path), function (err) {
     if (err)
         callback(err);
-    fs.writeFile(path + '.png', image, 'base64', function () {
-      callback(null);
-    });
+    fs.writeFile(path + '.png', image, 'base64', callback);
   });
 }
 
