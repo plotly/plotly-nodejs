@@ -12,6 +12,10 @@ var trace2 = {
   type: "scatter"
 };
 
-var data = [trace1, trace2];
+var payload = {
+    'figure': {
+        'data': [trace1, trace2]
+    }
+};
 
-plotly.save_image({'data': data}, 'path/to/image_name');
+plotly.saveImage(payload, 'img');
