@@ -77,7 +77,10 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
         self.streamHost = url.parse(body['stream-host']).hostname;
       }
       if ( body.error.length > 0 ) {
-        callback({msg: body.error, body: body, statusCode: res.statusCode});
+        var error = new Error(body.error);
+        error.body = body;
+        error.statusCode = res.statusCode;
+        callback(error);
       } else {
         callback(null, {
           streamstatus : body['stream-status'],
@@ -125,7 +128,9 @@ Plotly.prototype.stream = function(token, callback) {
   var stream = http.request(options, function(res) {
     var message = jsonStatus[res.statusCode];
     if (res.statusCode !== 200) {
-      callback({msg : message, statusCode: res.statusCode});
+      var error = new Error(message);
+      error.statusCode = res.statusCode;
+      callback(error);
     } else {
       callback(null, {msg : message, statusCode: res.statusCode});
     }
@@ -200,7 +205,8 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
 
   var req = https.request(options, function (res) {
     if (res.statusCode !== 200) {
-      callback(res.statusCode);
+      var error = new Error('Bad response status code ' + res.statusCode);
+      callback(error);
     } else {
       parseRes(res, function (err, body) {
         if (err) {
@@ -242,7 +248,7 @@ function parseRes (res, cb) {
       res.connection.destroy();
       res.writeHead(413, {'Content-Type': 'text/plain'});
       res.end("req body too large");
-      return cb("body overflow");
+      return cb(new Error("body overflow"));
     }
   });
 
