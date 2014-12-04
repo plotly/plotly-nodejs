@@ -4,10 +4,12 @@
   "description": "Simple node.js wrapper for the plot.ly API",
   "main": "index.js",
   "devDependencies": {
-    "random-signal": "0.0.2"
+    "random-signal": "0.0.2",
+    "tap": "^0.4.13",
+    "tape": "^3.0.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tap test"
   },
   "repository": {
     "type": "git",

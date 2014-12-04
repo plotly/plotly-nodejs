@@ -139,6 +139,7 @@ Plotly.prototype.stream = function(token, callback) {
     });
 
     if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
+
     return stream;
 };
 
@@ -182,9 +183,13 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
 Plotly.prototype.saveImage = function (figure, path, callback) {
     var self = this;
-    callback = callback || function() {};
+    callback = callback || function () {};
 
-    figure = JSON.stringify(figure);
+    var payload = {
+        figure: figure
+    };
+
+    payload = JSON.stringify(payload);
 
     var headers = {
         'plotly-username': self.username,
@@ -192,7 +197,7 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
         'plotly-version': self.version,
         'plotly-platform': self.platform,
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Content-Length': figure.length
+        'Content-Length': payload.length
     };
 
     var options = {
@@ -205,22 +210,18 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
     };
 
     var req = https.request(options, function (res) {
-        if (res.statusCode !== 200) {
-            var error = new Error('Bad response status code ' + res.statusCode);
-            callback(error);
-        } else {
-            parseRes(res, function (err, body) {
-                if (err) {
-                    callback(err);
-                } else {
-                    var image = JSON.parse(body).payload;
-                    writeFile(path, image, callback);
-                }
-            });
-        }
+        parseRes(res, function (err, body) {
+            if (res.statusCode !== 200) {
+                var error = new Error('Bad response status code ' + res.statusCode);
+                error.msg = body;
+                return callback(error);
+            }
+            var image = JSON.parse(body).payload;
+            writeFile(path, image, callback);
+        });
     });
 
-    req.write(figure);
+    req.write(payload);
     req.end();
 };
 
