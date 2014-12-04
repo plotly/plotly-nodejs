@@ -1,4 +1,5 @@
 #Plotly Node API
+[![Circle CI](https://circleci.com/gh/plotly/plotly-nodejs/tree/master.svg?style=svg)](https://circleci.com/gh/plotly/plotly-nodejs/tree/master)
 > Analyze and Visualize Data, Together		
 	
 	
