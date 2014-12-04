@@ -174,7 +174,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 ```
 
 ##plotly.saveImage(figure, path[, callback])
-`figure` is a JSON object of the graph figure, for example the `figure` returned by `plotly.getFigure` placed inside an associative array with the key `figure`  
+`figure` is a JSON object of the graph figure
 `path` is a string of the filepath and file name you wish to save the image as  
 `callback(err)`  where `err` is an Error Object
 ```javascript
@@ -187,11 +187,8 @@ var trace1 = {
 };
 
 var figure = { 'data': [trace1] };
-var payload = {
-  'figure': figure
-};
 
-plotly.saveImage(payload, 'path/to/image', function(err) {
+plotly.saveImage(figure, 'path/to/image', function(err) {
   if (err) console.log(err);
 });
 ```
@@ -204,11 +201,7 @@ var plotly = require('../.')('username','apiKey');
 // grab the figure from an existing plot
 plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
   if (err) console.log(err);
-  // now save that figure as a static image!
-  var payload = {
-    'figure': figure
-  }
-  plotly.saveImage(payload, 'path/to/image_name', function (err) {
+  plotly.saveImage(figure, 'path/to/image_name', function (err) {
     if (err) console.log(err);
   });
 });
