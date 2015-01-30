@@ -180,11 +180,12 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
 Plotly.prototype.getImage = function (figure, opts, callback) {
     callback = callback || function () {};
+    if (!figure) return new Error('no figure provided!');
 
     var self = this;
     var payload = JSON.stringify({
         figure: figure,
-        format: opts.format,
+        format: opts.format || 'png',
         width: opts.width || 700,
         height: opts.height || 500
     });
