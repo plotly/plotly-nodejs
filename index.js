@@ -213,10 +213,10 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
             if (res.statusCode !== 200) {
                 var error = new Error('Bad response status code ' + res.statusCode);
                 error.msg = body;
-                return callback(error);
+                return callback(error, null);
             }
             var imageData = JSON.parse(body).payload;
-            callback(imageData);
+            callback(null, imageData);
         });
     }
 

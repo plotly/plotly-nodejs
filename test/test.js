@@ -4,7 +4,7 @@ var test = require('tape');
 
 test('makes a rest call', function (t) {
 	t.plan(2);
-	
+
 	var plotly = require('../index')('node-test-account', 'tpmz9ye8hg');
 	var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
 	var layout = {fileopt : 'overwrite', filename : 'nodenodenodetest'};
@@ -20,7 +20,7 @@ test('makes a rest call', function (t) {
 	t.plan(2);
 
 	var options = {
-		username: 'node-test-account', 
+		username: 'node-test-account',
 		apiKey: 'tpmz9ye8hg',
 		host: 'plot.ly',
 		port: 443
@@ -52,15 +52,15 @@ test('makes a rest call', function (t) {
 
 test('plot with incorrect userdata and return error', function (t) {
 	t.plan(1);
-	
+
 	var plotly = require('../index')('node-test-accountasdfadsgaghaha', 'tpmz9ye8hg');
 	var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
 	var layout = {fileopt : 'overwrite', filename : 'nodenodenodetest'};
 
 	plotly.plot(data, layout, function (err, msg) {
-	
+
 		var errMessage = msg.message.split(',')[0];
-	
+
 		t.isEqual(errMessage, 'Aw', 'incorrect user info returns error... not properly though.');
 		t.end();
 	});
@@ -73,7 +73,7 @@ test('makes a rest call with host foo', function (t) {
 	var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
 	var layout = {fileopt : 'overwrite', filename : 'nodenodenodetest'};
 
-	plotly.plot(data, layout, function (err) {	
+	plotly.plot(data, layout, function (err) {
 		t.ok(err, 'error received as host was set to "foo"');
 		t.end();
 	});
@@ -119,25 +119,25 @@ test('getFigure error', function (t) {
 	t.plan(1);
 	var plotly = require('../index')('node-test-account', 'tpmz9ye8hg');
 	plotly.getFigure('node-test-account', '99', function (err) {
-	
+
 		t.ok(err);
 		t.end();
 	});
 });
 
-test('saveImage, good and error', function (t) {
+test('getImage, good and error', function (t) {
 	t.plan(2);
 	var plotly = require('../index')('node-test-account', 'tpmz9ye8hg');
-	
+
 	var trace1 = {
-	  x: [1, 2, 3, 4], 
-	  y: [10, 15, 13, 17], 
+	  x: [1, 2, 3, 4],
+	  y: [10, 15, 13, 17],
 	  type: 'scatter'
 	};
 
 	var trace2 = {
-	  x: [1, 2, 3, 4], 
-	  y: [16, 5, 11, 9], 
+	  x: [1, 2, 3, 4],
+	  y: [16, 5, 11, 9],
 	  type: 'scatter'
 	};
 
@@ -145,35 +145,33 @@ test('saveImage, good and error', function (t) {
 	    'data': [trace1, trace2]
 	};
 
-	plotly.saveImage(figure, 'img', function (err) {
+	plotly.getImage(figure, {}, function (err, imageData) {
 		t.notOk(err);
-		plotly.saveImage(figure, '/asdf/asdf/asdf', function (err) {
-			t.ok(err);
-			t.end();
-		});
+		t.ok(imageData);
+		t.end();
 	});
-
 });
 
-test('saveImage, imageserver error', function (t) {
-	t.plan(1);
+test('getImage, imageserver error', function (t) {
+	t.plan(2);
 	var plotly = require('../index')('node-test-account', 'tpmz9ye8hg');
-	
+
 	var trace1 = {
-	  x: [1, 2, 3, 4], 
-	  y: [10, 15, 13, 17], 
+	  x: [1, 2, 3, 4],
+	  y: [10, 15, 13, 17],
 	  type: 'scatter'
 	};
 
 	var trace2 = {
-	  x: [1, 2, 3, 4], 
-	  y: [16, 5, 11, 9], 
+	  x: [1, 2, 3, 4],
+	  y: [16, 5, 11, 9],
 	  type: 'scatter'
 	};
 
 	var data = [trace1, trace2];
-	plotly.saveImage(data, 'img', function (err) {
+	plotly.getImage(data, 'img', function (err, imageData) {
 		t.ok(err);
+		t.notOk(imageData);
 		t.end();
 	});
 

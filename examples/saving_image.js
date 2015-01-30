@@ -25,6 +25,6 @@ var imgOpts = {
     height: 500
 };
 
-plotly.getImage(figure, imgOpts, function (imageData) {
+plotly.getImage(figure, imgOpts, function (error, imageData) {
     fs.writeFile('1.png', imageData, 'base64');
 });
