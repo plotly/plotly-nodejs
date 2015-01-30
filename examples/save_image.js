@@ -1,16 +1,17 @@
 'use strict';
 
-var plotly = require('../.')('username','api_key');
+var fs = require('fs');
+var plotly = require('../.')('alexander.daniel','yhs5fjlwin');
 
 var trace1 = {
-  x: [1, 2, 3, 4], 
-  y: [10, 15, 13, 17], 
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
   type: 'scatter'
 };
 
 var trace2 = {
-  x: [1, 2, 3, 4], 
-  y: [16, 5, 11, 9], 
+  x: [1, 2, 3, 4],
+  y: [16, 5, 11, 9],
   type: 'scatter'
 };
 
@@ -18,4 +19,10 @@ var figure = {
     'data': [trace1, trace2]
 };
 
-plotly.saveImage(figure, 'img');
+var opts = {
+    format: 'png'
+};
+
+plotly.getImage(figure, opts, function (imageData) {
+    fs.writeFile('1.png', imageData, 'base64');
+});
