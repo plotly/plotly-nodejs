@@ -1,9 +1,9 @@
 #Plotly Node API
 [![Circle CI](https://circleci.com/gh/plotly/plotly-nodejs/tree/master.svg?style=svg)](https://circleci.com/gh/plotly/plotly-nodejs/tree/master)
-> Analyze and Visualize Data, Together		
-	
-	
-If you have a question about streaming let us know or open an issue!	
+> Analyze and Visualize Data, Together
+
+
+If you have a question about streaming let us know or open an issue!
 
 `ben@plot.ly` && `alexandre@plot.ly`
 
@@ -33,23 +33,23 @@ plotly.plot(data,graphOptions,function() {
 
 ####Full REST API Documentation can be found here: [https://plot.ly/api/rest/](https://plot.ly/api/rest/)
 
-Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings). 
+Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings).
 
 #Methods
 ##var plotly = require('plotly')(username, apiKey)
-`username` is a string containing your username    
-`apiKey` is a string containing your API key   
+`username` is a string containing your username
+`apiKey` is a string containing your API key
 ```javascript
 var plotly = require('plotly')('username', 'apiKey');
 ```
 
 ##plotly.plot(data,graphOptions[, callback])
-Plotly graphs are described declaratively with a data JSON Object and a graphOptions JSON Object. 
+Plotly graphs are described declaratively with a data JSON Object and a graphOptions JSON Object.
 `data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
 `graphOptions` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
-`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object	
+`callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object
 
-The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`	
+The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
 ```javascript
 // examples/rest-example.js
 
@@ -59,11 +59,11 @@ var data = [{x:[0,1,2], y:[3,2,1], type: 'bar'}];
 var graphOptions = {fileopt : "extend", filename : "nodenodenode"};
 
 plotly.plot(data, graphOptions, function (err, msg) {
-	console.log(msg);
+    console.log(msg);
 });
 ```
 ##var stream = plotly.stream(token[, callback])
-`token` accepts a token string   
+`token` accepts a token string
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`
 
 ```javascript
@@ -147,7 +147,7 @@ Plotly.plot(data, graphOptions, function (err, resp) {
     console.log(resp)
 
     var plotlystream = Plotly.stream(token, function () {})
-    var signalstream = Signal({tdelta: 100}) // 
+    var signalstream = Signal({tdelta: 100}) //
 
 
     plotlystream.on("error", function (err) {
@@ -161,8 +161,8 @@ Plotly.plot(data, graphOptions, function (err, resp) {
 
 
 ##plotly.getFigure(fileOwner, fileId[, callback])
-`file_owner` accepts a string of the file owner's name   
-`fileId` is an integer, representing the graph ID   
+`file_owner` accepts a string of the file owner's name
+`fileId` is an integer, representing the graph ID
 `callback(figure)` where `figure` is a the JSON object of the graph figure
 
 ```javascript
@@ -174,36 +174,56 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 });
 ```
 
-##plotly.saveImage(figure, path[, callback])
+##plotly.getImage(figure[, options, callback])
 `figure` is a JSON object of the graph figure
-`path` is a string of the filepath and file name you wish to save the image as  
-`callback(err)`  where `err` is an Error Object
+`options.format` | `jpg`, `png`, `pdf`, `eps`, `webp`
+`options.width` | width in `px` (default : 700)
+`options.height` | height in `px` (default : 500)
+
+`callback(err, imageData)`  
+
+`err` is an Error Object
+`imageData` is a `base64`-encoded string
+
 ```javascript
 var plotly = require('plotly')('username','apiKey');
+var fs = require('fs');
 
 var trace1 = {
-  x: [1, 2, 3, 4], 
-  y: [10, 15, 13, 17], 
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
   type: "scatter"
 };
 
 var figure = { 'data': [trace1] };
 
-plotly.saveImage(figure, 'path/to/image', function(err) {
-  if (err) console.log(err);
+var imgOpts = {
+    format: 'png',
+    width: 1000,
+    height: 500
+};
+
+plotly.getImage(figure, imgOpts, function (error, imageData) {
+    fs.writeFile('1.png', imageData, 'base64');
 });
 ```
 
-
-You can also use `getFigure()` and `saveImage()` together! 
+You can also use `getFigure()` and `getImage()` together!
 ```javascript
 var plotly = require('../.')('username','apiKey');
 
 // grab the figure from an existing plot
 plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
-  if (err) console.log(err);
-  plotly.saveImage(figure, 'path/to/image_name', function (err) {
-    if (err) console.log(err);
-  });
+	if (err) return console.log(err);
+
+	var imgOpts = {
+		format: 'png',
+		width: 1000,
+		height: 500
+	};
+
+	plotly.getImage(figure, imgOpts, function (error, imageData) {
+		fs.writeFile('1.png', imageData, 'base64');
+	});
 });
 ```

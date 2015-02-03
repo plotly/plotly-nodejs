@@ -4,9 +4,6 @@ var https = require('https');
 var http = require('http');
 var jsonStatus = require('./statusmsgs.json');
 var url = require('url');
-var fs = require('fs');
-var mkdirp = require('mkdirp');
-var getDirName = require('path').dirname;
 
 module.exports = Plotly;
 
@@ -126,9 +123,9 @@ Plotly.prototype.stream = function(token, callback) {
 
     if (!callback) { callback = function() {}; }
 
-    var stream = http.request(options, function(res) {
+    var stream = http.request(options, function (res) {
         var message = jsonStatus[res.statusCode];
-        
+
         if (res.statusCode !== 200) {
             var error = new Error(message);
             error.statusCode = res.statusCode;
@@ -181,15 +178,17 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
     req.end();
 };
 
-Plotly.prototype.saveImage = function (figure, path, callback) {
-    var self = this;
+Plotly.prototype.getImage = function (figure, opts, callback) {
     callback = callback || function () {};
+    if (!figure) return new Error('no figure provided!');
 
-    var payload = {
-        figure: figure
-    };
-
-    payload = JSON.stringify(payload);
+    var self = this;
+    var payload = JSON.stringify({
+        figure: figure,
+        format: opts.format || 'png',
+        width: opts.width || 700,
+        height: opts.height || 500
+    });
 
     var headers = {
         'plotly-username': self.username,
@@ -209,37 +208,28 @@ Plotly.prototype.saveImage = function (figure, path, callback) {
         agent: false
     };
 
-    var req = https.request(options, function (res) {
+    function handleResponse(res) {
         parseRes(res, function (err, body) {
             if (res.statusCode !== 200) {
                 var error = new Error('Bad response status code ' + res.statusCode);
                 error.msg = body;
-                return callback(error);
+                return callback(error, null);
             }
-            var image = JSON.parse(body).payload;
-            writeFile(path, image, callback);
+            var imageData = JSON.parse(body).payload;
+            callback(null, imageData);
         });
-    });
+    }
 
+    var req = https.request(options, handleResponse);
     req.write(payload);
     req.end();
 };
-
-
-// helper fn to create folders if they don't exist in the path
-function writeFile (path, image, callback) {
-    mkdirp(getDirName(path), function (err) {
-        if (err) return callback(err);
-        fs.writeFile(path + '.png', image, 'base64', callback);
-    });
-}
-
 
 // response parse helper fn
 function parseRes (res, cb) {
     var body = '';
     if ('setEncoding' in res) res.setEncoding('utf-8');
-    
+
     res.on('data', function (data) {
         body += data;
         if (body.length > 1e10) {
