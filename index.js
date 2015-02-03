@@ -25,7 +25,7 @@ function Plotly(username,apiKey) {
         this.port = 443;
     }
         this.streamHost = '';
-        this.version='0.0.2';
+        this.version='1.0.0';
         this.platform='nodejs';
         this.origin='plot';
 }
