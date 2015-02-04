@@ -1,7 +1,7 @@
 'use strict';
 
 var fs = require('fs');
-var plotly = require('../.')('your_username','api_key');
+var plotly = require('../.')('your_username','your_apikey');
 
 var trace1 = {
   x: [1, 2, 3, 4],
@@ -25,6 +25,9 @@ var imgOpts = {
     height: 500
 };
 
-plotly.getImage(figure, imgOpts, function (error, imageData) {
-    fs.writeFile('1.png', imageData, 'base64');
+plotly.getImage(figure, imgOpts, function (error, imageStream) {
+    if (error) return console.log (error);
+
+    var fileStream = fs.createWriteStream('1.png');
+    imageStream.pipe(fileStream);
 });

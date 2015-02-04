@@ -25,7 +25,7 @@ function Plotly(username,apiKey) {
         this.port = 443;
     }
         this.streamHost = '';
-        this.version='1.0.1';
+        this.version='1.0.2';
         this.platform='nodejs';
         this.origin='plot';
 }
@@ -209,15 +209,13 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     };
 
     function handleResponse(res) {
-        parseRes(res, function (err, body) {
-            if (res.statusCode !== 200) {
-                var error = new Error('Bad response status code ' + res.statusCode);
-                error.msg = body;
-                return callback(error, null);
-            }
-            var imageData = JSON.parse(body).payload;
-            callback(null, imageData);
-        });
+        if (res.statusCode !== 200) {
+            var error = new Error('Bad response status code ' + res.statusCode);
+            error.msg = res.body;
+            return callback(error, null);
+        }
+
+        callback(null, res);
     }
 
     var req = https.request(options, handleResponse);

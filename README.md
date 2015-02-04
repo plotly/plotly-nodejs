@@ -183,7 +183,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 `callback(err, imageData)`  
 
 `err` is an Error Object
-`imageData` is a `base64`-encoded string
+`imageStream` is a Stream of base-64 encoded imageData
 
 ```javascript
 var plotly = require('plotly')('username','apiKey');
@@ -203,8 +203,11 @@ var imgOpts = {
     height: 500
 };
 
-plotly.getImage(figure, imgOpts, function (error, imageData) {
-    fs.writeFile('1.png', imageData, 'base64');
+plotly.getImage(figure, imgOpts, function (error, imageStream) {
+    if (error) return console.log (error);
+
+    var fileStream = fs.createWriteStream('1.png');
+    imageStream.pipe(fileStream);
 });
 ```
 
@@ -222,8 +225,11 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 		height: 500
 	};
 
-	plotly.getImage(figure, imgOpts, function (error, imageData) {
-		fs.writeFile('1.png', imageData, 'base64');
-	});
+    plotly.getImage(figure, imgOpts, function (error, imageStream) {
+        if (error) return console.log (error);
+
+        var fileStream = fs.createWriteStream('2.png');
+        imageStream.pipe(fileStream);
+    });
 });
 ```
