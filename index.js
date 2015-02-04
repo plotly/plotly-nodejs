@@ -25,7 +25,7 @@ function Plotly(username,apiKey) {
         this.port = 443;
     }
         this.streamHost = '';
-        this.version='1.0.1';
+        this.version='1.0.2';
         this.platform='nodejs';
         this.origin='plot';
 }
@@ -214,7 +214,7 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
             error.msg = res.body;
             return callback(error, null);
         }
-        
+
         callback(null, res);
     }
 
