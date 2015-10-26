@@ -135,6 +135,10 @@ Plotly.prototype.stream = function(token, callback) {
         }
     });
 
+    stream.on('error', function (err) {
+        callback(err);
+    });
+
     if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
 
     return stream;
@@ -173,6 +177,10 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
                 callback(null, figure);
             }
         });
+    });
+
+    req.on('error', function (err) {
+        callback(err);
     });
 
     req.end();
@@ -219,6 +227,11 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     }
 
     var req = https.request(options, handleResponse);
+
+    req.on('error', function (err) {
+        callback(err);
+    });
+
     req.write(payload);
     req.end();
 };
