@@ -1,6 +1,6 @@
 {
   "name": "plotly",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple node.js wrapper for the plot.ly API",
   "main": "index.js",
   "devDependencies": {
