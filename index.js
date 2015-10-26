@@ -53,7 +53,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
     }
 
     // trim off last ambersand
-    urlencoded = urlencoded.substring(0, urlencoded.length - 1);
+    urlencoded = new Buffer(urlencoded.substring(0, urlencoded.length - 1), 'utf8');
 
     var options = {
         host: self.host,
