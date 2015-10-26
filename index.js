@@ -261,10 +261,19 @@ Plotly.prototype.deletePlot = function (fid, callback) {
         parseRes(res, function (err, body) {
 
             if (res.statusCode === 200) {
+
                 var msg = 'Successfully deleted plot: ' + self.username + ':' + fid;
                 callback(null, msg);
+
             } else {
-                callback(body); // Pass out the error message from the backend
+
+                var errObj = {
+                    statusCode: res.statusCode,
+                    err: body,
+                    statusMessage: res.statusMessage
+                };
+
+                callback(errObj); // Pass out the error message from the backend
             }
 
         });
