@@ -243,6 +243,6 @@ var plotly = require('../.')('username','apiKey');
 
 plotly.deletePlot('88', function (err, plot) {
     if (err) console.log(err)
-    else console.log(plot); // msg is the figure that was deleted
+    else console.log(plot);
 });
 ```
