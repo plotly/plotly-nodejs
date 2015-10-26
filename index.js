@@ -236,6 +236,55 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     req.end();
 };
 
+Plotly.prototype.deletePlot = function (fid, callback) {
+    if (!callback) callback = function () {};
+
+    var self = this;
+
+    // Create the base64 authstring from buffer
+    var encodedAPIAuth = new Buffer(this.username + ':' + this.apiKey).toString('base64');
+
+    var options = {
+        host: 'api.plot.ly',
+        port: this.port,
+        path: '/v2/files/' + this.username + ':' + fid + '/trash',
+        method: 'POST',
+        agent: false,
+        withCredentials: true,
+        headers: {
+            'Plotly-Client-Platform': 'nodejs ' + this.version,
+            'authorization': 'Basic ' + encodedAPIAuth
+        }
+    };
+
+    var req = https.request(options, function (res) {
+        parseRes(res, function (err, body) {
+
+            if (res.statusCode === 200) {
+
+                callback(null, body);
+
+            } else {
+
+                var errObj = {
+                    statusCode: res.statusCode,
+                    err: body,
+                    statusMessage: res.statusMessage
+                };
+
+                callback(errObj); // Pass out the error message from the backend
+            }
+
+        });
+    });
+
+    req.on('error', function (err) {
+        callback(err);
+    });
+
+    req.end();
+};
+
 // response parse helper fn
 function parseRes (res, cb) {
     var body = '';

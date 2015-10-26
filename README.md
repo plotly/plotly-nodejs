@@ -233,3 +233,16 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
     });
 });
 ```
+
+##plotly.deletePlot(fid[, callback])
+`fid` is a String, the id of the plot you wish you delete
+`callback` is a function with `err` and `plot` as parameters. `err`, if present, is the error message returned from the request. `plot` is the plot that was deleted.
+
+```javascript
+var plotly = require('../.')('username','apiKey');
+
+plotly.deletePlot('88', function (err, plot) {
+    if (err) console.log(err)
+    else console.log(plot);
+});
+```
