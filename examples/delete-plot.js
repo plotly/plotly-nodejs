@@ -1,8 +1,8 @@
 'use strict';
 
-var plotly = require('../.')('username','apiKey');
+var plotly = require('../.')('alexander.daniel','u1jactdk3m');
 
-plotly.deletePlot('888', function (err, msg) {
+plotly.deletePlot('2718', function (err, figure) {
 	if (err) console.log(err);
-	else console.log(msg);
+	else console.log(figure);
 });

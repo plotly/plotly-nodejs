@@ -236,13 +236,13 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 
 ##plotly.deletePlot(fid[, callback])
 `fid` is a String, the id of the plot you wish you delete
-`callback` is a function with `err` and `msg` as parameters.
+`callback` is a function with `err` and `figure` as parameters. `err`, if present, is the error message returned from the request. `figure` is the figure that was deleted.
 
 ```javascript
 var plotly = require('../.')('username','apiKey');
 
-plotly.deletePlot('88', function (err, msg) {
+plotly.deletePlot('88', function (err, figure) {
     if (err) console.log(err)
-    else console.log(msg);
+    else console.log(figure); // msg is the figure that was deleted
 });
 ```

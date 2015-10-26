@@ -262,8 +262,7 @@ Plotly.prototype.deletePlot = function (fid, callback) {
 
             if (res.statusCode === 200) {
 
-                var msg = 'Successfully deleted plot: ' + self.username + ':' + fid;
-                callback(null, msg);
+                callback(null, body);
 
             } else {
 
