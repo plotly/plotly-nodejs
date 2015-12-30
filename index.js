@@ -69,7 +69,13 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
 
     var req = https.request(options, function (res) {
         parseRes(res, function (err, body) {
-            body = JSON.parse(body);
+
+            /* Try to parse the response */
+            try {
+                body = JSON.parse(body);
+            } catch (e) {
+                callback(e);
+            }
 
             if ( body['stream-status'] != undefined) {
                 self.streamHost = url.parse(body['stream-host']).hostname;
@@ -169,13 +175,23 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
     var req = https.get(options, function (res) {
         parseRes(res, function (err, body) {
-            if (JSON.parse(body).error) {
-                err = JSON.parse(body).error;
-                callback(err);
-            } else {
-                var figure = JSON.parse(body).payload.figure;
+
+            /* Try to parse the response */
+            try {
+                body = JSON.parse(body);
+            } catch (e) {
+                callback(e);
+            }
+            
+            if (body.error) {
+                callback(body.error);
+            }
+
+            else {
+                var figure = body.payload.figure;
                 callback(null, figure);
             }
+
         });
     });
 
