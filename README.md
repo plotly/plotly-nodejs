@@ -36,7 +36,7 @@ Usage is also possible with [Tonicdev](https://tonicdev.com) using the following
 ```javascript
 var plot = require('plotly/notebook');
 
-plot([{ x: [1,2,3], y: [4,5,6] }], { title: 'Hello World!' titleFont: { color: '#663399' } });
+plot('test-plot', [{ x: [1,2,3], y: [4,5,6] }], { title: 'Hello World!' titleFont: { color: '#663399' } });
 ```
 
 This simply returns an HTML string that will be rendered.
