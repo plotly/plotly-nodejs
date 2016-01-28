@@ -31,6 +31,16 @@ plotly.plot(data,graphOptions,function() {
 });
 ```
 
+Usage is also possible with [Tonicdev](https://tonicdev.com) using the following code:
+
+```javascript
+var plot = require('plotly/notebook');
+
+plot([{ x: [1,2,3], y: [4,5,6] }], { title: 'Hello World!' titleFont: { color: '#663399' } });
+```
+
+This simply returns an HTML string that will be rendered.
+
 ####Full REST API Documentation can be found here: [https://plot.ly/api/rest/](https://plot.ly/api/rest/)
 
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings).
@@ -45,8 +55,8 @@ var plotly = require('plotly')('username', 'apiKey');
 
 ##plotly.plot(data,graphOptions[, callback])
 Plotly graphs are described declaratively with a data JSON Object and a graphOptions JSON Object.
-`data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
-`graphOptions` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
+`data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)
+`graphOptions` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)
 `callback(err,msg)` where `err` is an error Object, and `msg` is the return response Object
 
 The `msg` object has the following attributes : `msg.url`,`msg.filename`,`msg.message`,`msg.warning`,`msg.error`
@@ -180,7 +190,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 `options.width` | width in `px` (default : 700)
 `options.height` | height in `px` (default : 500)
 
-`callback(err, imageData)`  
+`callback(err, imageData)`
 
 `err` is an Error Object
 `imageStream` is a Stream of base-64 encoded imageData
