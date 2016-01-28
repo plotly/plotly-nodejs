@@ -5,8 +5,6 @@ module.exports = function(div, data, layout) {
     data = data || [];
     layout = layout || {};
 
-    var timestamp = new Date().getTime();
-
     return [
         '<div class=\'plotly-plot\'>',
         '<script type=\'text/javascript\' ',
