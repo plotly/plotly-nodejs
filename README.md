@@ -3,10 +3,6 @@
 > Analyze and Visualize Data, Together
 
 
-If you have a question about streaming let us know or open an issue!
-
-`ben@plot.ly` && `alexandre@plot.ly`
-
 ## Streaming Plot Examples
 - [mock sensor stream](http://plot.ly/~streaming-demos/6/)
 - [math bar fight](http://plot.ly/~streaming-demos/44/)
