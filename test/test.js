@@ -177,6 +177,30 @@ test('getImage, imageserver error', function (t) {
 
 });
 
+test('getImage with UTF characters', function (t) {
+    t.plan(2);
+    var plotly = require('../index')('node-test-account', 'tpmz9ye8hg');
+
+    var trace1 = {
+        x: [1, 2, 3, 4],
+        y: [10, 15, 13, 17],
+        type: 'scatter'
+    };
+
+    var figure = {
+        'data': [trace1],
+        'layout': {
+            'title': 'Title (μ = 0, σ = 1.0)'
+        }
+    };
+
+    plotly.getImage(figure, {}, function (err, imageData) {
+        t.error(err);
+        t.ok(imageData);
+        t.end();
+    });
+});
+
 test('creates a plot with UTF chars in filename', function (t) {
 	t.plan(1);
 

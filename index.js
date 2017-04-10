@@ -4,6 +4,7 @@ var https = require('https');
 var http = require('http');
 var jsonStatus = require('./statusmsgs.json');
 var url = require('url');
+var asciiJSON = require('ascii-json');
 
 module.exports = Plotly;
 
@@ -41,8 +42,8 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
     var pack = {
         'platform': self.platform,
         'version': self.version,
-        'args': JSON.stringify(data),
-        'kwargs': JSON.stringify(graphOptions),
+        'args': asciiJSON.stringify(data),
+        'kwargs': asciiJSON.stringify(graphOptions),
         'un': self.username,
         'key': self.apiKey,
         'origin': self.origin
@@ -72,7 +73,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
 
             /* Try to parse the response */
             try {
-                body = JSON.parse(body);
+                body = asciiJSON.parse(body);
             } catch (e) {
                 callback(e);
             }
@@ -178,7 +179,7 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
 
             /* Try to parse the response */
             try {
-                body = JSON.parse(body);
+                body = asciiJSON.parse(body);
             } catch (e) {
                 callback(e);
             }
@@ -207,7 +208,7 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     if (!figure) return new Error('no figure provided!');
 
     var self = this;
-    var payload = JSON.stringify({
+    var payload = asciiJSON.stringify({
         figure: figure,
         format: opts.format || 'png',
         width: opts.width || 700,
