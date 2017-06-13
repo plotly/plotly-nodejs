@@ -1,4 +1,4 @@
-#Plotly Node API
+# Plotly Node API
 [![Circle CI](https://circleci.com/gh/plotly/plotly-nodejs/tree/master.svg?style=svg)](https://circleci.com/gh/plotly/plotly-nodejs/tree/master)
 > Analyze and Visualize Data, Together
 
@@ -7,12 +7,12 @@
 - [mock sensor stream](http://plot.ly/~streaming-demos/6/)
 - [math bar fight](http://plot.ly/~streaming-demos/44/)
 
-##Installation
+## Installation
 ```javascript
 npm install plotly
 ```
 
-##Usage
+## Usage
 ```javascript
 var plotly = require('plotly')('username','apiKey');
 
@@ -27,19 +27,19 @@ plotly.plot(data,graphOptions,function() {
 });
 ```
 
-####Full REST API Documentation can be found here: [https://plot.ly/api/rest/](https://plot.ly/api/rest/)
+#### Full REST API Documentation can be found here: [https://plot.ly/api/rest/](https://plot.ly/api/rest/)
 
 Sign up for plotly here: [https://plot.ly/](https://plot.ly/) and obtain your API key and Stream Tokens in your plotly settings: [https://plot.ly/settings](https://plot.ly/settings).
 
-#Methods
-##var plotly = require('plotly')(username, apiKey)
+# Methods
+## var plotly = require('plotly')(username, apiKey)
 `username` is a string containing your username
 `apiKey` is a string containing your API key
 ```javascript
 var plotly = require('plotly')('username', 'apiKey');
 ```
 
-##plotly.plot(data,graphOptions[, callback])
+## plotly.plot(data,graphOptions[, callback])
 Plotly graphs are described declaratively with a data JSON Object and a graphOptions JSON Object.
 `data` is an array of Objects and with each object containing data and styling information of separate graph traces. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
 `graphOptions` is an Object containing styling options like axis information and titles for your graph. Docs: [https://plot.ly/api/rest](https://plot.ly/api/rest)  
@@ -58,7 +58,7 @@ plotly.plot(data, graphOptions, function (err, msg) {
     console.log(msg);
 });
 ```
-##var stream = plotly.stream(token[, callback])
+## var stream = plotly.stream(token[, callback])
 `token` accepts a token string
 `callback(res)` where `res` is a the response object with the following attributes : `res.msg`, `res.statusCode`
 
@@ -156,7 +156,7 @@ Plotly.plot(data, graphOptions, function (err, resp) {
 ```
 
 
-##plotly.getFigure(fileOwner, fileId[, callback])
+## plotly.getFigure(fileOwner, fileId[, callback])
 `file_owner` accepts a string of the file owner's name
 `fileId` is an integer, representing the graph ID
 `callback(figure)` where `figure` is a the JSON object of the graph figure
@@ -170,7 +170,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 });
 ```
 
-##plotly.getImage(figure[, options, callback])
+## plotly.getImage(figure[, options, callback])
 `figure` is a JSON object of the graph figure
 `options.format` | `jpg`, `png`, `pdf`, `eps`, `webp`
 `options.width` | width in `px` (default : 700)
@@ -230,7 +230,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 });
 ```
 
-##plotly.deletePlot(fid[, callback])
+## plotly.deletePlot(fid[, callback])
 `fid` is a String, the id of the plot you wish you delete
 `callback` is a function with `err` and `plot` as parameters. `err`, if present, is the error message returned from the request. `plot` is the plot that was deleted.
 
