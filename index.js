@@ -1,7 +1,5 @@
 'use strict';
 
-var https = require('https');
-var http = require('http');
 var jsonStatus = require('./statusmsgs.json');
 var url = require('url');
 
@@ -53,8 +51,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
     }
 
     // trim off last ambersand
-    urlencoded = new Buffer(urlencoded.substring(0, urlencoded.length - 1), 'utf8');
-
+    urlencoded = urlencoded.substring(0, urlencoded.length - 1);
     var options = {
         host: self.host,
         port: self.port,
@@ -66,13 +63,18 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
         },
         withCredentials: false
     };
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = (e) => {
 
-    var req = https.request(options, function (res) {
-        parseRes(res, function (err, body) {
+        if (req.readyState !== 4) {
+            return;
+        }
 
-            /* Try to parse the response */
+        if (req.status === 200) {
+     
+            // Try to parse the response
             try {
-                body = JSON.parse(body);
+                var body = JSON.parse(req.responseText);
             } catch (e) {
                 callback(e);
             }
@@ -84,7 +86,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
             if ( body.error.length > 0 ) {
                 var error = new Error(body.error);
                 error.body = body;
-                error.statusCode = res.statusCode;
+                error.statusCode = req.statusCode;
                 callback(error);
             } else {
                 callback(null, {
@@ -96,15 +98,26 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
                     error: body.error
                 });
             }
-        });
-    });
 
-    req.on('error', function(err) {
+        } else {
+            console.log('error = ' + req.status);
+        }
+    };
+
+    var encodedAPIAuth = new Buffer(this.username + ':' + this.apiKey).toString('base64');;
+    var apiEndpointURL = "https://" + options.host + options.path ;
+    req.open('POST', apiEndpointURL, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.setRequestHeader('Content-Length', "" + urlencoded.length );
+    req.setRequestHeader("Plotly-Client-Platform", "nodejs " + this.version );
+    req.setRequestHeader("authorization", "Basic " + encodedAPIAuth );
+
+    req.addEventListener("error", event => {
         callback(err);
     });
 
-    req.write(urlencoded);
-    req.end();
+     req.send(urlencoded);
+
 };
 
 Plotly.prototype.stream = function(token, callback) {
@@ -129,25 +142,40 @@ Plotly.prototype.stream = function(token, callback) {
 
     if (!callback) { callback = function() {}; }
 
-    var stream = http.request(options, function (res) {
-        var message = jsonStatus[res.statusCode];
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = (e) => {
 
-        if (res.statusCode !== 200) {
+        var message = jsonStatus[req.status];
+
+        if (req.status !== 200) {
             var error = new Error(message);
-            error.statusCode = res.statusCode;
+            error.statusCode = req.status;
             callback(error);
         } else {
-            callback(null, {msg : message, statusCode: res.statusCode});
+            callback(null, {msg : message, statusCode: req.status});
         }
-    });
 
-    stream.on('error', function (err) {
+    };
+
+    var encodedAPIAuth = new Buffer(this.username + ':' + this.apiKey).toString('base64');;
+    var apiEndpointURL = "https://" + options.host + options.path + ":" + options.port;
+    req.open('POST', apiEndpointURL, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.setRequestHeader("Plotly-Client-Platform", "nodejs " + this.version );
+    req.setRequestHeader("authorization", "Basic " + encodedAPIAuth );
+    req.setRequestHeader('plotly-streamtoken', token );
+
+    // Streaming funnc sendStream() to be implemented in next version
+    //req.sendStream(urlencoded);
+
+    req.addEventListener("error", event => {
         callback(err);
     });
 
-    if (stream.setTimeout) stream.setTimeout(Math.pow(2, 32) * 1000);
 
-    return stream;
+    if (req.setTimeout) req.setTimeout(Math.pow(2, 32) * 1000);
+
+    return req;
 };
 
 
@@ -173,8 +201,15 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
         method: 'GET'
     };
 
-    var req = https.get(options, function (res) {
-        parseRes(res, function (err, body) {
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = (e) => {
+
+            // Try to parse the response
+            try {
+                var body = JSON.parse(req.responseText);
+            } catch (e) {
+                callback(e);
+            }
 
             /* Try to parse the response */
             try {
@@ -182,24 +217,30 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
             } catch (e) {
                 callback(e);
             }
-            
+
             if (body.error) {
                 callback(body.error);
             }
-
             else {
                 var figure = body.payload.figure;
                 callback(null, figure);
             }
 
-        });
-    });
+    };
 
-    req.on('error', function (err) {
+
+    var encodedAPIAuth = new Buffer(this.username + ':' + this.apiKey).toString('base64');;
+    var apiEndpointURL = "https://" + options.host + resource ;
+    req.open('GET', apiEndpointURL, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.setRequestHeader("Plotly-Client-Platform", "nodejs " + this.version );
+    req.setRequestHeader("authorization", "Basic " + encodedAPIAuth );
+
+    req.addEventListener("error", event => {
         callback(err);
     });
 
-    req.end();
+    req.send();
 };
 
 Plotly.prototype.getImage = function (figure, opts, callback) {
@@ -233,23 +274,42 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     };
 
     function handleResponse(res) {
-        if (res.statusCode !== 200) {
-            var error = new Error('Bad response status code ' + res.statusCode);
-            error.msg = res.body;
+      // Try to parse the response
+        try {
+            var body = JSON.parse(req.responseText);
+        } catch (e) {
+            callback(e);
+        }
+
+        if (req.statusCode !== 200) {
+            var error = new Error('Bad response status code ' + req.statusCode);
+            error.msg = body;
             return callback(error, null);
         }
 
-        callback(null, res);
+        callback(null, req);
     }
 
-    var req = https.request(options, handleResponse);
 
-    req.on('error', function (err) {
+
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = (e) => {
+
+        handleResponse(req);
+    };
+
+    var apiEndpointURL = "https://" + options.host + options.path ;
+    req.open('POST', apiEndpointURL, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.setRequestHeader('Content-Length', "" + payload.length );
+    req.setRequestHeader("Plotly-Client-Platform", "nodejs " + this.version );
+    req.setRequestHeader("authorization", "Basic " + encodedAPIAuth );
+
+    req.addEventListener("error", event => {
         callback(err);
     });
 
-    req.write(payload);
-    req.end();
+      req.send(payload);
 };
 
 Plotly.prototype.deletePlot = function (fid, callback) {
@@ -273,52 +333,44 @@ Plotly.prototype.deletePlot = function (fid, callback) {
         }
     };
 
-    var req = https.request(options, function (res) {
-        parseRes(res, function (err, body) {
 
-            if (res.statusCode === 200) {
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = (e) => {
 
-                callback(null, body);
+        try {
+            var body = JSON.parse(req.responseText);
+        } catch (e) {
+            callback(e);
+        }
 
-            } else {
+        if (req.statusCode === 200) {
 
-                var errObj = {
-                    statusCode: res.statusCode,
-                    err: body,
-                    statusMessage: res.statusMessage
-                };
+            callback(null, body);
 
-                callback(errObj); // Pass out the error message from the backend
-            }
+        } else {
 
-        });
-    });
+            var errObj = {
+                statusCode: req.statusCode,
+                err: body,
+                statusMessage: req.statusMessage
+            };
 
-    req.on('error', function (err) {
+            callback(errObj); // Pass out the error message from the backend
+        }
+
+    };
+
+    var apiEndpointURL = "https://" + options.host + options.path ;
+    req.open('POST', apiEndpointURL, true);
+    req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    req.setRequestHeader("Plotly-Client-Platform", "nodejs " + this.version );
+    req.setRequestHeader("authorization", "Basic " + encodedAPIAuth );
+
+    req.addEventListener("error", event => {
         callback(err);
     });
 
-    req.end();
+    req.send();
+
 };
 
-// response parse helper fn
-function parseRes (res, cb) {
-    var body = '';
-    if ('setEncoding' in res) res.setEncoding('utf-8');
-
-    res.on('data', function (data) {
-        body += data;
-        if (body.length > 1e10) {
-            // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQ
-            res.connection.destroy();
-            res.writeHead(413, {'Content-Type': 'text/plain'});
-            res.end('req body too large');
-            return cb(new Error('body overflow'));
-        }
-    });
-
-    res.on('end', function () {
-        cb(null, body);
-    });
-
-}
