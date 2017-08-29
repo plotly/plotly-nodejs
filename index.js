@@ -207,10 +207,6 @@ Plotly.prototype.getImage = function (figure, opts, callback) {
     if (!figure) return new Error('no figure provided!');
 
     var self = this;
-
-    // allow both jpg and jpeg as file formats
-    if (opts && opts.format === 'jpg') opts.format = 'jpeg';
-
     var payload = JSON.stringify({
         figure: figure,
         format: opts.format || 'png',

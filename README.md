@@ -172,7 +172,7 @@ plotly.getFigure('fileOwner', 'fileId', function (err, figure) {
 
 ## plotly.getImage(figure[, options, callback])
 `figure` is a JSON object of the graph figure
-`options.format` | `jpg`, `jpeg`, `png`, `pdf`, `eps`, `webp`
+`options.format` | `jpeg`, `png`, `pdf`, `eps`, `webp`
 `options.width` | width in `px` (default : 700)
 `options.height` | height in `px` (default : 500)
 
