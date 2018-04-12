@@ -81,7 +81,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
                 self.streamHost = url.parse(body['stream-host']).hostname;
             }
 
-            if ( body.error.length > 0 ) {
+            if ( typeof body === 'string' || body.error.length > 0 ) {
                 var error = new Error(body.error);
                 error.body = body;
                 error.statusCode = res.statusCode;
@@ -182,9 +182,9 @@ Plotly.prototype.getFigure = function (fileOwner, fileId, callback) {
             } catch (e) {
                 callback(e);
             }
-            
-            if (body.error) {
-                callback(body.error);
+
+            if (body.error || !body.payload) {
+                callback(body.error || 'Something went wrong.');
             }
 
             else {
