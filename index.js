@@ -103,8 +103,7 @@ Plotly.prototype.plot = function(data, graphOptions, callback) {
         callback(err);
     });
 
-    req.write(urlencoded);
-    req.end();
+    req.end(urlencoded, 'utf8');
 };
 
 Plotly.prototype.stream = function(token, callback) {
